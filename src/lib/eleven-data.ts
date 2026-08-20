@@ -5,119 +5,199 @@ export type Service = {
   desc: string;
   descUz: string;
   price: number;
+  isFromPrice?: boolean;
   minutes: number;
   category: CategoryId;
   photo: string;
 };
 
-export type CategoryId = "eleven" | "top" | "bobur";
+export type CategoryId = "top" | "barber" | "bobur";
 
-export const CATEGORIES: { id: CategoryId; label: string; note: string }[] = [
-  { id: "eleven", label: "ELEVEN", note: "Базовый стандарт качества" },
-  { id: "top", label: "TOP BARBER", note: "Опытные мастера студии" },
-  { id: "bobur", label: "BOBUR VAFAEV", note: "VIP — только основатель" },
+export const CATEGORIES: { id: CategoryId; label: string; labelUz: string; note: string; noteUz: string }[] = [
+  {
+    id: "top",
+    label: "TOP BARBER",
+    labelUz: "TOP BARBER",
+    note: "Стрижки и борода от топ-мастеров",
+    noteUz: "Top-barberlar tomonidan soch va soqol",
+  },
+  {
+    id: "barber",
+    label: "Парикмахерские услуги",
+    labelUz: "Sartaroshlik xizmatlari",
+    note: "Стрижки, уход, воск, маски и тонирование",
+    noteUz: "Soch olish, parvarish, mum, niqob va toniklash",
+  },
+  {
+    id: "bobur",
+    label: "Bobur Vafaev",
+    labelUz: "Bobur Vafaev",
+    note: "VIP — авторский образ от основателя",
+    noteUz: "VIP — asoschining mualliflik yondashuvi",
+  },
 ];
 
 const P = (id: string, w = 800) =>
   `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=80`;
 
 export const SERVICES: Service[] = [
+  /* ─── 1. Услуги TOP BARBER ─── */
   {
-    id: "e1",
-    name: "Мужская стрижка",
-    nameUz: "Erkaklar soch olish",
-    desc: "Консультация, стрижка машинкой и ножницами, укладка и стайлинг.",
-    descUz: "Konsultatsiya, mashinka va qaychi bilan soch olish, styling.",
-    price: 120000,
-    minutes: 60,
-    category: "eleven",
-    photo: P("photo-1585747860715-2ba37e788b70"),
-  },
-  {
-    id: "e2",
-    name: "Стрижка + Борода",
-    nameUz: "Soch + Soqol",
-    desc: "Полный образ: стрижка, контур бороды бритвой, горячее полотенце.",
-    descUz: "To'liq ko'rinish: soch, ustara bilan soqol konturi, issiq sochiq.",
-    price: 150000,
-    minutes: 80,
-    category: "eleven",
-    photo: P("photo-1621605815971-fbc98d665033"),
-  },
-  {
-    id: "e3",
-    name: "Детская стрижка",
-    nameUz: "Bolalar soch olish",
-    desc: "Спокойно и аккуратно — для юных джентльменов до 12 лет.",
-    descUz: "Xotirjam va ozoda — 12 yoshgacha yosh janoblar uchun.",
-    price: 100000,
-    minutes: 45,
-    category: "eleven",
-    photo: P("photo-1596728325488-58c87691e9af"),
-  },
-  {
-    id: "e4",
-    name: "Тонирование",
-    nameUz: "Toniklash",
-    desc: "Камуфляж седины и выравнивание тона волос или бороды.",
-    descUz: "Oq sochni kamuflyaj qilish va soch tonini tenglashtirish.",
-    price: 60000,
-    minutes: 30,
-    category: "eleven",
-    photo: P("photo-1517832606299-7ae9b720a186"),
-  },
-  {
-    id: "e5",
-    name: "Черная маска",
-    nameUz: "Qora maska",
-    desc: "Глубокое очищение кожи лица, сужение пор, свежий вид.",
-    descUz: "Yuz terisini chuqur tozalash, teshiklarni toraytirish.",
-    price: 60000,
-    minutes: 25,
-    category: "eleven",
-    photo: P("photo-1560750588-73207b1ef5b8"),
-  },
-  {
-    id: "t1",
+    id: "top-1",
     name: "Стрижка",
     nameUz: "Soch olish",
-    desc: "Работа топ-барбера студии: сложные формы и точный фейд.",
-    descUz: "Studiya top-barberi ishi: murakkab shakllar va aniq feyd.",
+    desc: "Фирменная мужская стрижка от топ-мастера с подбором формы и укладкой.",
+    descUz: "Top-ustadan mualliflik erkaklar soch turmagi va styling.",
     price: 150000,
     minutes: 60,
     category: "top",
     photo: P("photo-1503443207922-dff7d543fd0e"),
   },
   {
-    id: "t2",
+    id: "top-2",
     name: "Стрижка + Борода",
     nameUz: "Soch + Soqol",
-    desc: "Топ-барбер, полный уход за бородой и стайлинг премиум-косметикой.",
-    descUz: "Top-barber, soqol parvarishi va premium kosmetika bilan styling.",
+    desc: "Полный образ от топ-барбера: моделирование бороды, четкие линии и уход.",
+    descUz: "Top-barberdan to'liq obraz: soqol modellash, toza chiziqlar va parvarish.",
     price: 200000,
     minutes: 90,
     category: "top",
+    photo: P("photo-1621605815971-fbc98d665033"),
+  },
+  {
+    id: "top-3",
+    name: "Детская стрижка (до 11 лет включительно)",
+    nameUz: "Bolalar soch olish (11 yoshgacha)",
+    desc: "Бережная и стильная стрижка для детей и подростков в кресле топ-мастера.",
+    descUz: "Bolalar va o'smirlar uchun xotirjam va zamonaviy soch turmagi.",
+    price: 140000,
+    minutes: 45,
+    category: "top",
+    photo: P("photo-1596728325488-58c87691e9af"),
+  },
+
+  /* ─── 2. Парикмахерские услуги ─── */
+  {
+    id: "barber-wedding",
+    name: "Свадебные причёски",
+    nameUz: "To'y turmaklari",
+    desc: "Торжественная укладка и премиальная прическа для жениха и особых событий.",
+    descUz: "Kuyov va maxsus tantanalar uchun tantanali soch turmagi va styling.",
+    price: 800000,
+    isFromPrice: true,
+    minutes: 120,
+    category: "barber",
+    photo: P("photo-1503951914875-452162b0f3f1"),
+  },
+  {
+    id: "barber-styling",
+    name: "Укладка",
+    nameUz: "Soch turmaklash (styling)",
+    desc: "Мытье головы, моделирование формы и фиксация премиальным стайлингом.",
+    descUz: "Bosh yuvish, shakl berish va premium styling bilan mahkamlash.",
+    price: 70000,
+    minutes: 30,
+    category: "barber",
+    photo: P("photo-1517832606299-7ae9b720a186"),
+  },
+  {
+    id: "barber-clipper",
+    name: "Стрижка под насадку",
+    nameUz: "Mashinka bilan olish",
+    desc: "Быстрая, ровная и аккуратная стрижка машинкой с переходами.",
+    descUz: "Mashinka bilan tezkor, tekis va chiroyli o'tishlar bilan olish.",
+    price: 100000,
+    minutes: 30,
+    category: "barber",
+    photo: P("photo-1585747860715-2ba37e788b70"),
+  },
+  {
+    id: "barber-facial",
+    name: "Чистка лица",
+    nameUz: "Yuz tozalash",
+    desc: "Глубокое очищение пор, отшелушивание и освежающий тонизирующий уход.",
+    descUz: "Yuz teshiklarini chuqur tozalash va terini yangilovchi parvarish.",
+    price: 80000,
+    minutes: 30,
+    category: "barber",
+    photo: P("photo-1560750588-73207b1ef5b8"),
+  },
+  {
+    id: "barber-beard-razor",
+    name: "Коррекция бороды (с лезвием)",
+    nameUz: "Soqol korreksiyasi (ustara bilan)",
+    desc: "Оформление контуров опасной бритвой, распаривание и масло для бороды.",
+    descUz: "Ustara bilan soqol chiziqlarini to'g'rilash, bug'lash va soqol moyi.",
+    price: 70000,
+    minutes: 30,
+    category: "barber",
     photo: P("photo-1519085360753-af0119f7cbe7"),
   },
   {
-    id: "b1",
+    id: "barber-wax",
+    name: "Горячий воск",
+    nameUz: "Issiq mum (vosk)",
+    desc: "Деликатное удаление нежелательных волос в зоне носа, ушей и скул.",
+    descUz: "Burun, quloq va yanoq sohasidagi keraksiz tuklarni nozik tozalash.",
+    price: 60000,
+    minutes: 15,
+    category: "barber",
+    photo: P("photo-1547425260-76bcadfb4f2c"),
+  },
+  {
+    id: "barber-toning-head",
+    name: "Тонирование головы",
+    nameUz: "Bosh sochlarini toniklash",
+    desc: "Естественный камуфляж седины и придание волосам глубокого естественного цвета.",
+    descUz: "Oq sochlarni tabiiy kamuflyaj qilish va yorqin rang berish.",
+    price: 60000,
+    minutes: 30,
+    category: "barber",
+    photo: P("photo-1521119989659-a83eee488004"),
+  },
+  {
+    id: "barber-toning-beard",
+    name: "Тонирование бороды",
+    nameUz: "Soqol toniklash",
+    desc: "Выравнивание тона бороды, скрытие седины и придание густоты цвету.",
+    descUz: "Soqol rangini bir xil qilish va oq sochlarni berkitish.",
+    price: 50000,
+    minutes: 15,
+    category: "barber",
+    photo: P("photo-1531384441138-2736e62e0919"),
+  },
+  {
+    id: "barber-black-mask",
+    name: "Черная маска",
+    nameUz: "Qora maska",
+    desc: "Детокс-маска для лица от черных точек с успокаивающим лосьоном.",
+    descUz: "Qora nuqtalarga qarshi detoks-maska va tinchlantiruvchi losyon.",
+    price: 60000,
+    minutes: 30,
+    category: "barber",
+    photo: P("photo-1560750588-73207b1ef5b8"),
+  },
+
+  /* ─── 3. Услуги Bobur Vafaev ─── */
+  {
+    id: "bobur-haircut",
     name: "Стрижка у Бобура",
-    nameUz: "Bobur bilan soch olish",
-    desc: "Персональная работа основателя ELEVEN — авторский подход.",
-    descUz: "ELEVEN asoschisining shaxsiy ishi — muallif yondashuvi.",
+    nameUz: "Bobur Vafaev bilan soch olish",
+    desc: "Персональная работа основателя ELEVEN — авторский стиль и безупречная форма.",
+    descUz: "ELEVEN asoschisidan shaxsiy soch turmagi — eksklyuziv individual uslub.",
     price: 500000,
-    minutes: 90,
+    minutes: 120,
     category: "bobur",
     photo: P("photo-1622286342621-4bd786c2447c"),
   },
   {
-    id: "b2",
-    name: "Образ жениха",
-    nameUz: "Kuyov ko'rinishi",
-    desc: "Полный премиум-пакет для главного дня: стрижка, борода, уход, маска.",
-    descUz: "Asosiy kun uchun premium paket: soch, soqol, parvarish, maska.",
+    id: "bobur-groom",
+    name: "Образ жениха у Бобура 100$",
+    nameUz: "Kuyov ko'rinishi (Bobur Vafaev) 100$",
+    desc: "Эксклюзивный полный VIP-образ жениха (100$): стрижка, борода, уход за кожей и укладка.",
+    descUz: "Kuyov uchun to'liq VIP obraz (100$): soch, soqol, teri parvarishi va tantanali styling.",
     price: 1300000,
-    minutes: 150,
+    minutes: 120,
     category: "bobur",
     photo: P("photo-1492562080023-ab3db95bfbce"),
   },
@@ -253,8 +333,13 @@ export const LOOKBOOK = [
   P("photo-1622286342621-4bd786c2447c", 900),
 ];
 
-export const formatPrice = (v: number) =>
-  new Intl.NumberFormat("ru-RU").format(v).replace(/\u00A0/g, " ") + " сум";
+export const formatPrice = (v: number, isFrom?: boolean, lang: "ru" | "uz" = "ru") => {
+  const formatted = new Intl.NumberFormat("ru-RU").format(v).replace(/\u00A0/g, " ");
+  if (lang === "uz") {
+    return isFrom ? `${formatted} so'mdan` : `${formatted} so'm`;
+  }
+  return isFrom ? `от ${formatted} сум` : `${formatted} сум`;
+};
 
 export const formatTime = (min: number, lang: "ru" | "uz" = "ru") => {
   const h = Math.floor(min / 60);

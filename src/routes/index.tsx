@@ -1,5 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { AnimatePresence, motion } from "motion/react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { motion } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   ArrowRight,
@@ -7,14 +7,12 @@ import {
   ChevronRight,
   Clock,
   Coffee,
+  Droplets,
   Instagram,
   MapPin,
-  Menu,
   Phone,
   Scissors,
   Sparkles,
-  X,
-  Droplets,
 } from "lucide-react";
 
 import {
@@ -25,6 +23,8 @@ import {
   formatTime,
   type Barber,
 } from "@/lib/eleven-data";
+import { Navbar } from "@/components/eleven/Navbar";
+import { Footer } from "@/components/eleven/Footer";
 import { MasterModal } from "@/components/eleven/MasterModal";
 import {
   ADDRESS,
@@ -37,7 +37,7 @@ import {
   type Lang,
 } from "@/lib/eleven-i18n";
 
-export const Route = createFileRoute("/")(  {
+export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
     meta: [
@@ -45,12 +45,12 @@ export const Route = createFileRoute("/")(  {
       {
         name: "description",
         content:
-          "ELEVEN — премиум барбершоп: стрижки, борода, VIP у Бобура Вафаева. Онлайн-бронь кресла за минуту.",
+          "ELEVEN — премиум барбершоп в Самарканде: стрижки, борода, VIP у Бобура Вафаева. Онлайн-бронь кресла за минуту.",
       },
       { property: "og:title", content: "ELEVEN — премиум барбершоп" },
       {
         property: "og:description",
-        content: "Твоя территория. Твой стиль. Забронируй кресло у лучших мастеров.",
+        content: "Твоя территория. Твой стиль. Забронируй кресло у лучших мастеров Самарканда.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -62,23 +62,18 @@ export const Route = createFileRoute("/")(  {
 const HERO_IMG =
   "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=1920&q=80";
 
-/* Only show these 5 services in the catalog */
-const CATALOG_SERVICES = SERVICES.filter((s) =>
-  ["e1", "e2", "e3", "e4", "e5"].includes(s.id),
-);
-
-/* ─── Nav links ─── */
-const NAV_IDS = ["home", "services", "team", "lookbook", "contacts"] as const;
-
-function scrollTo(id: string) {
-  document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════ */
+/* Featured services for home teaser */
+const FEATURED_SERVICES = [
+  SERVICES.find((s) => s.id === "top-1")!,
+  SERVICES.find((s) => s.id === "top-2")!,
+  SERVICES.find((s) => s.id === "barber-wedding")!,
+  SERVICES.find((s) => s.id === "bobur-haircut")!,
+  SERVICES.find((s) => s.id === "barber-facial")!,
+  SERVICES.find((s) => s.id === "barber-styling")!,
+].filter(Boolean);
 
 function Index() {
   const [lang, setLang] = useState<Lang>("ru");
-  const [mobileMenu, setMobileMenu] = useState(false);
   const [master, setMaster] = useState<Barber | null>(null);
   const L = t(lang);
 
@@ -147,119 +142,10 @@ function Index() {
     setIsDragging(false);
   };
 
-  const navLabels: Record<(typeof NAV_IDS)[number], string> = {
-    home: L.home,
-    services: L.services,
-    team: L.team,
-    lookbook: L.lookbook,
-    contacts: L.contacts,
-  };
-
-  const handleNav = useCallback(
-    (id: string) => {
-      scrollTo(id);
-      setMobileMenu(false);
-    },
-    [],
-  );
-
   return (
-    <main className="relative overflow-x-hidden bg-[#050505] pb-20">
-      {/* ─────────────────────── STICKY HEADER ─────────────────────── */}
-      <header className="fixed inset-x-0 top-0 z-50">
-        <div className="mx-auto mt-3 flex w-[94%] max-w-5xl items-center justify-between rounded-full px-5 py-3 glass">
-          {/* Logo */}
-          <button
-            onClick={() => scrollTo("home")}
-            className="font-display text-xl tracking-[0.25em] sm:text-2xl"
-          >
-            ELEVEN
-          </button>
-
-          {/* Desktop nav */}
-          <nav className="hidden items-center gap-7 lg:flex">
-            {NAV_IDS.map((id) => (
-              <button
-                key={id}
-                onClick={() => scrollTo(id)}
-                className="text-base font-medium tracking-wide text-muted-foreground uppercase transition hover:text-foreground"
-              >
-                {navLabels[id]}
-              </button>
-            ))}
-          </nav>
-
-          {/* Right side */}
-          <div className="flex items-center gap-2.5">
-            {/* Lang switcher */}
-            <div className="flex items-center rounded-full border border-white/10 p-0.5 text-[10px] font-semibold tracking-[0.15em]">
-              {(["ru", "uz"] as Lang[]).map((l) => (
-                <button
-                  key={l}
-                  onClick={() => setLang(l)}
-                  aria-pressed={lang === l}
-                  className={`rounded-full px-2.5 py-1 uppercase transition ${
-                    lang === l
-                      ? "bg-primary text-primary-foreground"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  {l}
-                </button>
-              ))}
-            </div>
-
-            {/* CTA */}
-            <button
-              onClick={() => scrollTo("team")}
-              className="hidden rounded-full bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground transition hover:opacity-90 sm:block"
-            >
-              {L.book}
-            </button>
-
-            {/* Mobile hamburger */}
-            <button
-              className="grid size-9 place-items-center rounded-full transition hover:bg-white/10 lg:hidden"
-              onClick={() => setMobileMenu((v) => !v)}
-              aria-label={mobileMenu ? L.close : L.menu}
-            >
-              {mobileMenu ? <X className="size-5" /> : <Menu className="size-5" />}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile dropdown */}
-        <AnimatePresence>
-          {mobileMenu && (
-            <motion.nav
-              initial={{ opacity: 0, y: -10, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -10, scale: 0.98 }}
-              transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-              className="mx-auto mt-2 flex w-[94%] max-w-5xl flex-col gap-1.5 rounded-3xl p-4 bg-[#0c0c0c]/98 backdrop-blur-3xl border border-white/12 shadow-[0_24px_64px_rgba(0,0,0,0.9)] lg:hidden"
-            >
-              {NAV_IDS.map((id) => (
-                <button
-                  key={id}
-                  onClick={() => handleNav(id)}
-                  className="flex items-center justify-between rounded-2xl px-4 py-3 text-left text-sm font-medium tracking-wider text-foreground/80 uppercase transition hover:bg-white/[0.08] hover:text-foreground active:scale-[0.99]"
-                >
-                  <span>{navLabels[id]}</span>
-                  <ArrowRight className="size-3.5 text-muted-foreground/50" />
-                </button>
-              ))}
-              <div className="pt-2 border-t border-white/10 mt-1">
-                <button
-                  onClick={() => handleNav("team")}
-                  className="w-full rounded-2xl bg-primary py-3.5 text-center text-sm font-semibold tracking-wide text-primary-foreground shadow-[0_0_20px_rgba(255,255,255,0.2)] transition active:scale-[0.99]"
-                >
-                  {L.book}
-                </button>
-              </div>
-            </motion.nav>
-          )}
-        </AnimatePresence>
-      </header>
+    <main className="relative overflow-x-hidden bg-[#050505] text-foreground pb-20">
+      {/* Shared Navbar */}
+      <Navbar lang={lang} setLang={setLang} onBookClick={() => setMaster(BARBERS[0])} />
 
       {/* ─────────────────────── HERO ─────────────────────── */}
       <section id="home" className="relative flex min-h-screen items-center justify-center overflow-hidden">
@@ -267,6 +153,7 @@ function Index() {
         <img
           src={HERO_IMG}
           alt="Интерьер барбершопа ELEVEN"
+          decoding="async"
           className="absolute inset-0 size-full scale-105 object-cover"
         />
         {/* Heavy dark overlay */}
@@ -308,8 +195,8 @@ function Index() {
             className="mt-10 flex flex-col items-center gap-5 sm:flex-row"
           >
             <button
-              onClick={() => scrollTo("team")}
-              className="group inline-flex items-center gap-3 rounded-full px-8 py-4 text-sm font-semibold tracking-wide transition hover:bg-white/10 glass-strong"
+              onClick={() => setMaster(BARBERS[0])}
+              className="group inline-flex items-center gap-3 rounded-full px-8 py-4 text-sm font-semibold tracking-wide transition hover:bg-white/10 glass-strong shadow-[0_0_30px_rgba(255,255,255,0.15)]"
             >
               {L.heroCta}
               <ArrowRight className="size-4 transition group-hover:translate-x-1" />
@@ -327,35 +214,49 @@ function Index() {
       </section>
 
       {/* ─────────────────────── SERVICES (Наши услуги) ─────────────────────── */}
-      <section id="services" className="mx-auto w-[92%] max-w-6xl py-28" style={{ contentVisibility: "auto", containIntrinsicSize: "auto 800px" }}>
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6 }}
-        >
-          <h2 className="font-display text-4xl tracking-wide sm:text-6xl">{L.servicesTitle}</h2>
-          <p className="mt-2 max-w-xl text-sm text-muted-foreground">{L.servicesHint}</p>
-        </motion.div>
+      <section
+        id="services"
+        className="mx-auto w-[92%] max-w-6xl py-28"
+        style={{ contentVisibility: "auto", containIntrinsicSize: "auto 800px" }}
+      >
+        <div className="flex flex-wrap items-end justify-between gap-4 mb-10">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="font-display text-4xl tracking-wide sm:text-6xl">{L.servicesTitle}</h2>
+            <p className="mt-2 max-w-xl text-sm text-muted-foreground">{L.servicesHint}</p>
+          </motion.div>
 
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {CATALOG_SERVICES.map((s, i) => (
+          <Link
+            to="/services"
+            className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-wider liquid-glass-btn hover:scale-105 transition"
+          >
+            <span>{L.viewAll} ({SERVICES.length})</span>
+            <ArrowRight className="size-3.5" />
+          </Link>
+        </div>
+
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {FEATURED_SERVICES.map((s, i) => (
             <motion.div
               key={s.id}
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.5, delay: i * 0.07 }}
-              className="group overflow-hidden rounded-[2rem] glass transition hover:bg-white/[0.07]"
+              transition={{ duration: 0.5, delay: i * 0.06 }}
+              className="group overflow-hidden rounded-[2rem] glass transition hover:bg-white/[0.08]"
             >
               {/* Service photo */}
-              <div className="overflow-hidden">
+              <div className="overflow-hidden aspect-[16/10]">
                 <img
                   src={s.photo}
                   alt={lang === "uz" ? s.nameUz : s.name}
                   loading="lazy"
                   decoding="async"
-                  className="aspect-[16/10] w-full object-cover grayscale transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
+                  className="size-full object-cover grayscale transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
                 />
               </div>
 
@@ -364,7 +265,7 @@ function Index() {
                 <div className="flex items-start justify-between gap-3">
                   <h3 className="text-base font-semibold">{lang === "uz" ? s.nameUz : s.name}</h3>
                   <span className="shrink-0 text-sm font-semibold tabular-nums text-foreground/90">
-                    {formatPrice(s.price)}
+                    {formatPrice(s.price, s.isFromPrice, lang)}
                   </span>
                 </div>
 
@@ -374,14 +275,20 @@ function Index() {
                 </span>
 
                 {/* Description */}
-                <p className="text-xs leading-relaxed text-muted-foreground">
+                <p className="text-xs leading-relaxed text-muted-foreground line-clamp-2">
                   {lang === "uz" ? s.descUz : s.desc}
                 </p>
 
                 {/* CTA */}
                 <button
-                  onClick={() => scrollTo("team")}
-                  className="flex w-full items-center justify-center gap-2 rounded-2xl border border-white/10 py-3 text-xs font-medium tracking-wide text-foreground/80 transition hover:bg-white/[0.06] hover:text-foreground"
+                  onClick={() => {
+                    const target =
+                      s.category === "bobur"
+                        ? BARBERS.find((b) => b.role === "Founder") || BARBERS[0]
+                        : BARBERS[0];
+                    setMaster(target);
+                  }}
+                  className="flex w-full items-center justify-center gap-2 rounded-2xl border border-white/10 py-3 text-xs font-medium tracking-wide text-foreground/80 transition hover:bg-white/[0.08] hover:text-foreground"
                 >
                   {L.chooseMaster}
                   <ArrowRight className="size-3.5" />
@@ -414,8 +321,12 @@ function Index() {
         </div>
       </section>
 
-      {/* ─────────────────────── TEAM (Horizontal Carousel) ─────────────────────── */}
-      <section id="team" className="pb-28" style={{ contentVisibility: "auto", containIntrinsicSize: "auto 500px" }}>
+      {/* ─────────────────────── TEAM (Horizontal Carousel with Liquid Glass) ─────────────────────── */}
+      <section
+        id="team"
+        className="pb-28"
+        style={{ contentVisibility: "auto", containIntrinsicSize: "auto 500px" }}
+      >
         <div className="mx-auto mb-8 flex w-[92%] max-w-6xl flex-wrap items-end justify-between gap-4">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
@@ -423,7 +334,15 @@ function Index() {
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="font-display text-4xl tracking-wide sm:text-6xl">{L.teamTitle}</h2>
+            <div className="flex items-center gap-3">
+              <h2 className="font-display text-4xl tracking-wide sm:text-6xl">{L.teamTitle}</h2>
+              <Link
+                to="/team"
+                className="hidden sm:inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground font-semibold uppercase tracking-wider ml-4"
+              >
+                {L.allTeam} <ArrowRight className="size-3" />
+              </Link>
+            </div>
             <p className="mt-2 text-sm text-muted-foreground">{L.teamHint}</p>
           </motion.div>
 
@@ -537,7 +456,11 @@ function Index() {
       </section>
 
       {/* ─────────────────────── LOOKBOOK ─────────────────────── */}
-      <section id="lookbook" className="mx-auto w-[92%] max-w-6xl pb-28" style={{ contentVisibility: "auto", containIntrinsicSize: "auto 800px" }}>
+      <section
+        id="lookbook"
+        className="mx-auto w-[92%] max-w-6xl pb-28"
+        style={{ contentVisibility: "auto", containIntrinsicSize: "auto 800px" }}
+      >
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -545,10 +468,19 @@ function Index() {
           transition={{ duration: 0.6 }}
           className="mb-8 flex items-end justify-between"
         >
-          <h2 className="font-display text-4xl tracking-wide sm:text-6xl">{L.lookbookTitle}</h2>
-          <span className="text-xs tracking-[0.2em] text-muted-foreground uppercase">
-            {L.ourWork}
-          </span>
+          <div>
+            <h2 className="font-display text-4xl tracking-wide sm:text-6xl">{L.lookbookTitle}</h2>
+            <p className="mt-2 text-xs tracking-[0.2em] text-muted-foreground uppercase">
+              {L.ourWork}
+            </p>
+          </div>
+          <Link
+            to="/lookbook"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground hover:text-foreground transition"
+          >
+            <span>{L.viewAll}</span>
+            <ArrowRight className="size-3.5" />
+          </Link>
         </motion.div>
 
         <div className="columns-2 gap-4 [column-fill:_balance] sm:columns-2 lg:columns-3">
@@ -576,17 +508,29 @@ function Index() {
       </section>
 
       {/* ─────────────────────── CONTACTS ─────────────────────── */}
-      <section id="contacts" className="mx-auto w-[92%] max-w-6xl pb-20" style={{ contentVisibility: "auto", containIntrinsicSize: "auto 600px" }}>
+      <section
+        id="contacts"
+        className="mx-auto w-[92%] max-w-6xl pb-20"
+        style={{ contentVisibility: "auto", containIntrinsicSize: "auto 600px" }}
+      >
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.6 }}
+          className="flex items-end justify-between mb-10"
         >
           <h2 className="font-display text-4xl tracking-wide sm:text-6xl">{L.contactsTitle}</h2>
+          <Link
+            to="/contacts"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground hover:text-foreground transition"
+          >
+            <span>{L.viewAll}</span>
+            <ArrowRight className="size-3.5" />
+          </Link>
         </motion.div>
 
-        <div className="mt-10 grid gap-6 lg:grid-cols-2">
+        <div className="grid gap-6 lg:grid-cols-2">
           {/* Info cards */}
           <div className="space-y-4">
             {/* Address */}
@@ -710,27 +654,10 @@ function Index() {
         </div>
       </section>
 
-      {/* ─────────────────────── FOOTER ─────────────────────── */}
-      <footer className="mx-auto w-[92%] max-w-6xl border-t border-border pt-10 pb-6">
-        <div className="flex flex-wrap items-end justify-between gap-6">
-          <span className="font-display text-5xl tracking-[0.2em]">ELEVEN</span>
-          <div className="space-y-1 text-xs text-muted-foreground sm:text-right">
-            <p>{ADDRESS_CITY[lang]}, {ADDRESS[lang]}</p>
-            <p>{HOURS[lang]}</p>
-            <a
-              href={INSTAGRAM}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 transition hover:text-foreground"
-            >
-              <Instagram className="size-3.5" />
-              @eleven_uzb
-            </a>
-          </div>
-        </div>
-      </footer>
+      {/* Shared Footer */}
+      <Footer lang={lang} />
 
-      {/* ─── Master Modal ─── */}
+      {/* Master Modal */}
       <MasterModal master={master} onClose={() => setMaster(null)} lang={lang} />
     </main>
   );

@@ -47,25 +47,35 @@ const dict = {
 
     /* services */
     servicesTitle: "Наши услуги",
-    servicesHint: "Выберите услугу и запишитесь к мастеру",
+    servicesSubtitle: "Полный прайс-лист мужских стрижек, ухода и авторских услуг",
+    servicesHint: "Выберите услугу и запишитесь к мастеру за 1 минуту",
     chooseMaster: "Выбрать мастера",
+    allServices: "Все услуги",
+    allCategories: "Все",
+    duration: "Длительность",
+    from: "от",
 
     /* team */
     teamTitle: "Команда",
+    teamSubtitle: "10 профессионалов своего дела — от барберов до основателя",
     teamHint: "Листайте стрелками или свайпайте для выбора мастера",
     experience: "Опыт",
     years: "лет",
+    allTeam: "Вся команда",
 
     /* lookbook */
     lookbookTitle: "LOOKBOOK",
+    lookbookSubtitle: "Галерея стрижек, бороды и стайлинга гостей ELEVEN",
     ourWork: "наши работы",
 
     /* contacts */
     contactsTitle: "Контакты",
+    contactsSubtitle: "Ждем вас каждый день в центре Самарканда в ТРЦ «Атлас»",
     address: "Адрес",
     workHours: "Часы работы",
     phone: "Телефон",
     mapTitle: "Как нас найти",
+    getDirections: "Построить маршрут",
 
     /* vibe cards */
     cardCareT: "Премиальный уход",
@@ -85,6 +95,9 @@ const dict = {
     /* misc */
     menu: "Меню",
     close: "Закрыть",
+    backToHome: "На главную",
+    viewAll: "Смотреть все",
+    bookNow: "Записаться онлайн",
   },
   uz: {
     /* nav */
@@ -103,25 +116,35 @@ const dict = {
 
     /* services */
     servicesTitle: "Bizning xizmatlar",
-    servicesHint: "Xizmatni tanlang va ustaga yoziling",
+    servicesSubtitle: "Erkaklar soch olish, parvarish va mualliflik xizmatlari narxlari",
+    servicesHint: "Xizmatni tanlang va 1 daqiqada ustaga yoziling",
     chooseMaster: "Ustani tanlash",
+    allServices: "Barcha xizmatlar",
+    allCategories: "Barchasi",
+    duration: "Davomiyligi",
+    from: "dan",
 
     /* team */
     teamTitle: "Jamoa",
+    teamSubtitle: "O'z ishining 10 nafar ustasi — barberlardan asoschigacha",
     teamHint: "Ustalarni ko'rish uchun strelkalarni bosing yoki suring",
     experience: "Tajriba",
     years: "yil",
+    allTeam: "Barcha ustalar",
 
     /* lookbook */
     lookbookTitle: "LOOKBOOK",
+    lookbookSubtitle: "ELEVEN mehmonlarining soch, soqol va styling fotogalereyasi",
     ourWork: "bizning ishlarimiz",
 
     /* contacts */
     contactsTitle: "Kontaktlar",
+    contactsSubtitle: "Samarqand markazidagi «Atlas» savdo markazida har kuni kutamiz",
     address: "Manzil",
     workHours: "Ish vaqti",
     phone: "Telefon",
     mapTitle: "Bizni qanday topish mumkin",
+    getDirections: "Marshrut tuzish",
 
     /* vibe cards */
     cardCareT: "Mukammal parvarish",
@@ -141,6 +164,9 @@ const dict = {
     /* misc */
     menu: "Menyu",
     close: "Yopish",
+    backToHome: "Bosh sahifaga",
+    viewAll: "Barchasini ko'rish",
+    bookNow: "Onlayn yozilish",
   },
 } as const;
 
