@@ -52,7 +52,7 @@ const dict = {
 
     /* team */
     teamTitle: "Команда",
-    teamHint: "Свайпай, чтобы посмотреть мастеров",
+    teamHint: "Листайте стрелками или свайпайте для выбора мастера",
     experience: "Опыт",
     years: "лет",
 
@@ -108,7 +108,7 @@ const dict = {
 
     /* team */
     teamTitle: "Jamoa",
-    teamHint: "Ustalarni ko'rish uchun suring",
+    teamHint: "Ustalarni ko'rish uchun strelkalarni bosing yoki suring",
     experience: "Tajriba",
     years: "yil",
 

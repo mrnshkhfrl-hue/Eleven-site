@@ -88,6 +88,7 @@ export function MasterModal({ master, onClose, lang }: Props) {
                   <img
                     src={master.photo}
                     alt={master.name}
+                    decoding="async"
                     className="aspect-[4/3] w-full object-cover object-top grayscale"
                   />
                 </div>
@@ -135,6 +136,7 @@ export function MasterModal({ master, onClose, lang }: Props) {
                           src={src}
                           alt={`${master.name} — работа ${i + 1}`}
                           loading="lazy"
+                          decoding="async"
                           className="aspect-square w-full object-cover grayscale transition duration-700 hover:grayscale-0"
                         />
                       </div>

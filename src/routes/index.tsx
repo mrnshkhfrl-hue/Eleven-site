@@ -1,8 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "motion/react";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   ArrowRight,
+  ChevronLeft,
+  ChevronRight,
   Clock,
   Coffee,
   MapPin,
@@ -78,6 +80,71 @@ function Index() {
   const [mobileMenu, setMobileMenu] = useState(false);
   const [master, setMaster] = useState<Barber | null>(null);
   const L = t(lang);
+
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStartRef = useRef<{ startX: number; scrollLeft: number; hasMoved: boolean }>({
+    startX: 0,
+    scrollLeft: 0,
+    hasMoved: false,
+  });
+
+  const checkScrollButtons = useCallback(() => {
+    if (!carouselRef.current) return;
+    const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current;
+    setCanScrollLeft(scrollLeft > 10);
+    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
+  }, []);
+
+  useEffect(() => {
+    const el = carouselRef.current;
+    if (!el) return;
+    checkScrollButtons();
+    el.addEventListener("scroll", checkScrollButtons, { passive: true });
+    window.addEventListener("resize", checkScrollButtons);
+    return () => {
+      el.removeEventListener("scroll", checkScrollButtons);
+      window.removeEventListener("resize", checkScrollButtons);
+    };
+  }, [checkScrollButtons]);
+
+  const scrollCarousel = useCallback((direction: "left" | "right") => {
+    if (!carouselRef.current) return;
+    const container = carouselRef.current;
+    const firstCard = container.querySelector<HTMLElement>("[data-barber-card]");
+    const step = firstCard ? firstCard.offsetWidth + 16 : 280;
+    container.scrollBy({
+      left: direction === "left" ? -step : step,
+      behavior: "smooth",
+    });
+  }, []);
+
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!carouselRef.current) return;
+    setIsDragging(true);
+    dragStartRef.current = {
+      startX: e.pageX - carouselRef.current.offsetLeft,
+      scrollLeft: carouselRef.current.scrollLeft,
+      hasMoved: false,
+    };
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!isDragging || !carouselRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - carouselRef.current.offsetLeft;
+    const walk = (x - dragStartRef.current.startX) * 1.2;
+    if (Math.abs(walk) > 6) {
+      dragStartRef.current.hasMoved = true;
+    }
+    carouselRef.current.scrollLeft = dragStartRef.current.scrollLeft - walk;
+  };
+
+  const handleMouseUpOrLeave = () => {
+    setIsDragging(false);
+  };
 
   const navLabels: Record<(typeof NAV_IDS)[number], string> = {
     home: L.home,
@@ -256,7 +323,7 @@ function Index() {
       </section>
 
       {/* ─────────────────────── SERVICES (Наши услуги) ─────────────────────── */}
-      <section id="services" className="mx-auto w-[92%] max-w-6xl py-28">
+      <section id="services" className="mx-auto w-[92%] max-w-6xl py-28" style={{ contentVisibility: "auto", containIntrinsicSize: "auto 800px" }}>
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -283,6 +350,7 @@ function Index() {
                   src={s.photo}
                   alt={lang === "uz" ? s.nameUz : s.name}
                   loading="lazy"
+                  decoding="async"
                   className="aspect-[16/10] w-full object-cover grayscale transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
                 />
               </div>
@@ -343,8 +411,8 @@ function Index() {
       </section>
 
       {/* ─────────────────────── TEAM (Horizontal Carousel) ─────────────────────── */}
-      <section id="team" className="pb-28">
-        <div className="mx-auto mb-8 w-[92%] max-w-6xl">
+      <section id="team" className="pb-28" style={{ contentVisibility: "auto", containIntrinsicSize: "auto 500px" }}>
+        <div className="mx-auto mb-8 flex w-[92%] max-w-6xl flex-wrap items-end justify-between gap-4">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -354,42 +422,118 @@ function Index() {
             <h2 className="font-display text-4xl tracking-wide sm:text-6xl">{L.teamTitle}</h2>
             <p className="mt-2 text-sm text-muted-foreground">{L.teamHint}</p>
           </motion.div>
+
+          {/* Liquid Glass Navigation Buttons */}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => scrollCarousel("left")}
+              disabled={!canScrollLeft}
+              aria-label="Назад"
+              className={`group relative grid size-12 place-items-center rounded-full liquid-glass-btn transition-all duration-300 ${
+                canScrollLeft
+                  ? "text-foreground hover:scale-105 active:scale-95 cursor-pointer shadow-[0_0_24px_rgba(255,255,255,0.15)]"
+                  : "opacity-35 cursor-not-allowed text-muted-foreground"
+              }`}
+            >
+              <ChevronLeft className="size-5 transition-transform group-hover:-translate-x-0.5" />
+            </button>
+            <button
+              onClick={() => scrollCarousel("right")}
+              disabled={!canScrollRight}
+              aria-label="Вперед"
+              className={`group relative grid size-12 place-items-center rounded-full liquid-glass-btn transition-all duration-300 ${
+                canScrollRight
+                  ? "text-foreground hover:scale-105 active:scale-95 cursor-pointer shadow-[0_0_24px_rgba(255,255,255,0.15)]"
+                  : "opacity-35 cursor-not-allowed text-muted-foreground"
+              }`}
+            >
+              <ChevronRight className="size-5 transition-transform group-hover:translate-x-0.5" />
+            </button>
+          </div>
         </div>
 
-        {/* Horizontal scroll carousel */}
-        <div className="scrollbar-hide flex snap-x snap-mandatory gap-4 overflow-x-auto px-[4%] pb-4">
-          {BARBERS.map((b, i) => (
-            <motion.button
-              key={b.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.04 }}
-              onClick={() => setMaster(b)}
-              className="w-[68vw] shrink-0 snap-center overflow-hidden rounded-[2rem] text-left transition hover:bg-white/[0.08] sm:w-64 glass"
-            >
-              <img
-                src={b.photo}
-                alt={b.name}
-                loading="lazy"
-                className="aspect-[3/4] w-full object-cover object-top grayscale transition duration-500 hover:grayscale-0"
-              />
-              <div className="p-4">
-                <h3 className="text-sm font-semibold">{b.name}</h3>
-                <p className="mt-0.5 text-[11px] tracking-[0.2em] text-muted-foreground uppercase">
-                  {b.role}
-                </p>
-                <p className="mt-1 text-[10px] text-muted-foreground">
-                  {L.experience}: {b.years} {L.years}
-                </p>
-              </div>
-            </motion.button>
-          ))}
+        {/* Horizontal scroll carousel wrapper with floating arrows */}
+        <div className="relative group/carousel">
+          {/* Floating Left Arrow (Desktop) */}
+          <button
+            onClick={() => scrollCarousel("left")}
+            disabled={!canScrollLeft}
+            aria-label="Предыдущий мастер"
+            className={`absolute left-3 lg:left-6 top-1/2 -translate-y-1/2 z-20 hidden md:grid size-12 place-items-center rounded-full liquid-glass-btn transition-all duration-300 ${
+              canScrollLeft
+                ? "text-foreground opacity-90 hover:opacity-100 hover:scale-110 active:scale-95 cursor-pointer shadow-[0_0_28px_rgba(255,255,255,0.2)]"
+                : "opacity-0 pointer-events-none"
+            }`}
+          >
+            <ChevronLeft className="size-6" />
+          </button>
+
+          {/* Horizontal scroll carousel */}
+          <div
+            ref={carouselRef}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUpOrLeave}
+            onMouseLeave={handleMouseUpOrLeave}
+            className={`scrollbar-hide flex snap-x snap-mandatory gap-4 overflow-x-auto px-[4%] pb-4 select-none ${
+              isDragging ? "cursor-grabbing scroll-auto" : "cursor-grab"
+            }`}
+            style={{ scrollBehavior: isDragging ? "auto" : "smooth" }}
+          >
+            {BARBERS.map((b, i) => (
+              <motion.button
+                key={b.id}
+                data-barber-card
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.04 }}
+                onClick={() => {
+                  if (!dragStartRef.current.hasMoved) {
+                    setMaster(b);
+                  }
+                }}
+                className="w-[68vw] shrink-0 snap-center overflow-hidden rounded-[2rem] text-left transition duration-300 hover:bg-white/[0.08] sm:w-64 glass"
+              >
+                <img
+                  src={b.photo}
+                  alt={b.name}
+                  loading="lazy"
+                  decoding="async"
+                  draggable={false}
+                  className="aspect-[3/4] w-full object-cover object-top grayscale transition duration-500 hover:grayscale-0 pointer-events-none"
+                />
+                <div className="p-4">
+                  <h3 className="text-sm font-semibold">{b.name}</h3>
+                  <p className="mt-0.5 text-[11px] tracking-[0.2em] text-muted-foreground uppercase">
+                    {b.role}
+                  </p>
+                  <p className="mt-1 text-[10px] text-muted-foreground">
+                    {L.experience}: {b.years} {L.years}
+                  </p>
+                </div>
+              </motion.button>
+            ))}
+          </div>
+
+          {/* Floating Right Arrow (Desktop) */}
+          <button
+            onClick={() => scrollCarousel("right")}
+            disabled={!canScrollRight}
+            aria-label="Следующий мастер"
+            className={`absolute right-3 lg:right-6 top-1/2 -translate-y-1/2 z-20 hidden md:grid size-12 place-items-center rounded-full liquid-glass-btn transition-all duration-300 ${
+              canScrollRight
+                ? "text-foreground opacity-90 hover:opacity-100 hover:scale-110 active:scale-95 cursor-pointer shadow-[0_0_28px_rgba(255,255,255,0.2)]"
+                : "opacity-0 pointer-events-none"
+            }`}
+          >
+            <ChevronRight className="size-6" />
+          </button>
         </div>
       </section>
 
       {/* ─────────────────────── LOOKBOOK ─────────────────────── */}
-      <section id="lookbook" className="mx-auto w-[92%] max-w-6xl pb-28">
+      <section id="lookbook" className="mx-auto w-[92%] max-w-6xl pb-28" style={{ contentVisibility: "auto", containIntrinsicSize: "auto 800px" }}>
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -419,6 +563,7 @@ function Index() {
                 src={src}
                 alt={`Работа мастеров ELEVEN ${i + 1}`}
                 loading="lazy"
+                decoding="async"
                 className="size-full object-cover grayscale transition duration-700 hover:scale-105 hover:grayscale-0"
               />
             </motion.div>
@@ -427,7 +572,7 @@ function Index() {
       </section>
 
       {/* ─────────────────────── CONTACTS ─────────────────────── */}
-      <section id="contacts" className="mx-auto w-[92%] max-w-6xl pb-20">
+      <section id="contacts" className="mx-auto w-[92%] max-w-6xl pb-20" style={{ contentVisibility: "auto", containIntrinsicSize: "auto 600px" }}>
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
