@@ -27,7 +27,7 @@ export const HOURS = {
 export const PHONE = "+998 (66) 233-11-11";
 export const PHONE_HREF = "tel:+998662331111";
 
-export const INSTAGRAM = "https://instagram.com/eleven.barbershop";
+export const INSTAGRAM = "https://instagram.com/eleven_uzb";
 
 const dict = {
   ru: {

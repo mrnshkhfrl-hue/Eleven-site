@@ -7,6 +7,7 @@ import {
   ChevronRight,
   Clock,
   Coffee,
+  Instagram,
   MapPin,
   Menu,
   Phone,
@@ -231,27 +232,30 @@ function Index() {
         <AnimatePresence>
           {mobileMenu && (
             <motion.nav
-              initial={{ opacity: 0, y: -12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.2 }}
-              className="mx-auto mt-2 flex w-[94%] max-w-5xl flex-col gap-1 rounded-3xl p-3 glass-strong lg:hidden"
+              initial={{ opacity: 0, y: -10, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -10, scale: 0.98 }}
+              transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+              className="mx-auto mt-2 flex w-[94%] max-w-5xl flex-col gap-1.5 rounded-3xl p-4 bg-[#0c0c0c]/98 backdrop-blur-3xl border border-white/12 shadow-[0_24px_64px_rgba(0,0,0,0.9)] lg:hidden"
             >
               {NAV_IDS.map((id) => (
                 <button
                   key={id}
                   onClick={() => handleNav(id)}
-                  className="rounded-2xl px-4 py-3 text-left text-base font-medium tracking-wide text-foreground/80 uppercase transition hover:bg-white/[0.06] hover:text-foreground"
+                  className="flex items-center justify-between rounded-2xl px-4 py-3 text-left text-sm font-medium tracking-wider text-foreground/80 uppercase transition hover:bg-white/[0.08] hover:text-foreground active:scale-[0.99]"
                 >
-                  {navLabels[id]}
+                  <span>{navLabels[id]}</span>
+                  <ArrowRight className="size-3.5 text-muted-foreground/50" />
                 </button>
               ))}
-              <button
-                onClick={() => handleNav("team")}
-                className="mt-1 rounded-2xl bg-primary py-3 text-center text-sm font-semibold text-primary-foreground"
-              >
-                {L.book}
-              </button>
+              <div className="pt-2 border-t border-white/10 mt-1">
+                <button
+                  onClick={() => handleNav("team")}
+                  className="w-full rounded-2xl bg-primary py-3.5 text-center text-sm font-semibold tracking-wide text-primary-foreground shadow-[0_0_20px_rgba(255,255,255,0.2)] transition active:scale-[0.99]"
+                >
+                  {L.book}
+                </button>
+              </div>
             </motion.nav>
           )}
         </AnimatePresence>
@@ -274,9 +278,9 @@ function Index() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="mb-6 inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[10px] tracking-[0.3em] uppercase glass"
+            className="mb-6 inline-flex items-center rounded-full px-5 py-2 text-[10px] font-medium tracking-[0.3em] uppercase glass"
           >
-            <Sparkles className="size-3" /> {L.heroBadge}
+            {L.heroBadge}
           </motion.p>
 
           <motion.h1
@@ -666,10 +670,10 @@ function Index() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-3 text-sm font-medium transition hover:text-muted-foreground"
               >
-                <span className="grid size-10 place-items-center rounded-2xl bg-white/[0.06]">
-                  <Sparkles className="size-5 text-foreground/70" />
+                <span className="grid size-10 place-items-center rounded-2xl bg-white/[0.06] text-foreground/80">
+                  <Instagram className="size-5" />
                 </span>
-                @eleven.barbershop
+                @eleven_uzb
               </a>
             </motion.div>
           </div>
@@ -717,9 +721,10 @@ function Index() {
               href={INSTAGRAM}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block transition hover:text-foreground"
+              className="inline-flex items-center gap-1.5 transition hover:text-foreground"
             >
-              @eleven.barbershop
+              <Instagram className="size-3.5" />
+              @eleven_uzb
             </a>
           </div>
         </div>
