@@ -26,7 +26,7 @@ export const Route = createFileRoute("/contacts")({
       {
         name: "description",
         content:
-          "Контакты премиум барбершопа ELEVEN в Самарканде. Адрес: ул. Амира Тимура, 224 (ТРЦ «Атлас»). Время работы: 10:00 - 21:00. Телефон: +998 (66) 233-11-11.",
+          "Контакты премиум барбершопа ELEVEN в Самарканде. Адрес: ул. Амира Тимура, 224 (ориентир: ТРЦ «Атлас»). Время работы: 10:00 - 21:00. Телефон: +998 (66) 233-11-11.",
       },
       { property: "og:title", content: "Контакты — ELEVEN Барбершоп" },
       {
@@ -96,7 +96,7 @@ function ContactsPage() {
                 {ADDRESS[lang]}
               </p>
               <a
-                href="https://yandex.uz/maps/10334/samarkand/?ll=66.923681%2C39.646072&mode=routes&rtext=39.646337%2C66.923655~39.646232%2C66.924297&z=19.06"
+                href="https://yandex.uz/maps/-/CTsLYDkj"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-3 inline-flex items-center gap-2 text-xs font-semibold text-primary hover:underline"
@@ -183,20 +183,8 @@ function ContactsPage() {
             transition={{ duration: 0.6 }}
             className="relative overflow-hidden rounded-[2.5rem] border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] bg-white/5 lg:col-span-7 h-[480px] lg:h-[580px]"
           >
-            <a
-              href="https://yandex.uz/maps/10334/samarkand/?utm_medium=mapframe&utm_source=maps"
-              className="absolute top-0 text-xs text-[#eee] opacity-0 pointer-events-none"
-            >
-              Самарканд
-            </a>
-            <a
-              href="https://yandex.uz/maps/10334/samarkand/?from=mapframe&ll=66.923681%2C39.646072&mode=routes&rtext=39.646337%2C66.923655~39.646232%2C66.924297&rtt=auto&ruri=ymapsbm1%3A%2F%2Forg%3Foid%3D242105212925~ymapsbm1%3A%2F%2Forg%3Foid%3D93382537025&utm_medium=mapframe&utm_source=maps&z=19.06"
-              className="absolute top-3.5 text-xs text-[#eee] opacity-0 pointer-events-none"
-            >
-              Atlas: как доехать на автомобиле, общественным транспортом или пешком – Яндекс Карты
-            </a>
             <iframe
-              src="https://yandex.uz/map-widget/v1/?from=mapframe&ll=66.923681%2C39.646072&mode=routes&rtext=39.646337%2C66.923655~39.646232%2C66.924297&rtt=auto&ruri=ymapsbm1%3A%2F%2Forg%3Foid%3D242105212925~ymapsbm1%3A%2F%2Forg%3Foid%3D93382537025&z=19.06"
+              src="https://yandex.uz/map-widget/v1/?from=mapframe&ll=66.923753%2C39.646396&mode=poi&poi%5Bpoint%5D=66.923656%2C39.646335&poi%5Buri%5D=ymapsbm1%3A%2F%2Forg%3Foid%3D242105212925&z=18.82"
               title={L.mapTitle}
               className="size-full"
               style={{ border: 0 }}

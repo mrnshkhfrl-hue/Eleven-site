@@ -1,12 +1,13 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { AnimatePresence, motion } from "motion/react";
+import { createFileRoute } from "@tanstack/react-router";
+import { motion } from "motion/react";
 import { useState } from "react";
-import { Image as ImageIcon, X, ArrowRight } from "lucide-react";
+import { Image as ImageIcon } from "lucide-react";
 
-import { LOOKBOOK, BARBERS, type Barber } from "@/lib/eleven-data";
+import { LOOKBOOK, type Barber } from "@/lib/eleven-data";
 import { Navbar } from "@/components/eleven/Navbar";
 import { Footer } from "@/components/eleven/Footer";
 import { MasterModal } from "@/components/eleven/MasterModal";
+import { LightboxModal } from "@/components/eleven/LightboxModal";
 import { t, type Lang } from "@/lib/eleven-i18n";
 
 export const Route = createFileRoute("/lookbook")({
@@ -30,7 +31,7 @@ export const Route = createFileRoute("/lookbook")({
 
 export function LookbookPage() {
   const [lang, setLang] = useState<Lang>("ru");
-  const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [master, setMaster] = useState<Barber | null>(null);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const L = t(lang);
@@ -70,8 +71,9 @@ export function LookbookPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: i * 0.05 }}
-              onClick={() => setSelectedPhoto(src)}
-              className={`mb-4 cursor-pointer overflow-hidden rounded-[2rem] border border-white/10 glass group relative ${
+              onClick={() => setLightboxIndex(i)}
+              style={{ breakInside: "avoid" }}
+              className={`break-inside-avoid mb-4 cursor-pointer overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] group relative transition-all duration-300 hover:border-white/25 hover:bg-white/[0.06] ${
                 i % 3 === 0 ? "aspect-[3/4]" : i % 3 === 1 ? "aspect-square" : "aspect-[4/5]"
               }`}
             >
@@ -82,7 +84,7 @@ export function LookbookPage() {
                 decoding="async"
                 className="size-full object-cover grayscale transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
               />
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5">
                 <span className="text-xs font-semibold uppercase tracking-wider text-white">
                   ELEVEN Style #{i + 1}
                 </span>
@@ -92,39 +94,13 @@ export function LookbookPage() {
         </div>
       </div>
 
-      {/* Lightbox Modal */}
-      <AnimatePresence>
-        {selectedPhoto && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setSelectedPhoto(null)}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-xl"
-          >
-            <button
-              onClick={() => setSelectedPhoto(null)}
-              className="absolute top-6 right-6 grid size-11 place-items-center rounded-full glass text-white transition hover:bg-white/20"
-              aria-label="Закрыть"
-            >
-              <X className="size-6" />
-            </button>
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="max-h-[85vh] max-w-4xl overflow-hidden rounded-3xl border border-white/15"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <img
-                src={selectedPhoto}
-                alt="Просмотр фотографии"
-                className="max-h-[80vh] w-auto object-contain rounded-3xl"
-              />
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Fullscreen Lightbox Modal */}
+      <LightboxModal
+        photos={LOOKBOOK}
+        currentIndex={lightboxIndex}
+        onClose={() => setLightboxIndex(null)}
+        onSelectIndex={(idx) => setLightboxIndex(idx)}
+      />
 
       {/* Shared Footer */}
       <Footer lang={lang} />

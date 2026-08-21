@@ -3,8 +3,10 @@ import { motion } from "motion/react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowRight,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
+  ChevronUp,
   Clock,
   Coffee,
   Droplets,
@@ -29,6 +31,7 @@ import {
 import { Navbar } from "@/components/eleven/Navbar";
 import { Footer } from "@/components/eleven/Footer";
 import { MasterModal, getRoleBadge } from "@/components/eleven/MasterModal";
+import { LightboxModal } from "@/components/eleven/LightboxModal";
 import {
   ADDRESS,
   ADDRESS_CITY,
@@ -68,6 +71,9 @@ const HERO_IMG =
 function Index() {
   const [lang, setLang] = useState<Lang>("ru");
   const [activeCategory, setActiveCategory] = useState<CategoryId | "all">("all");
+  const [showAllServices, setShowAllServices] = useState(false);
+  const [lightboxPhotos, setLightboxPhotos] = useState<string[]>(LOOKBOOK);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [master, setMaster] = useState<Barber | null>(null);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const L = t(lang);
@@ -145,9 +151,11 @@ function Index() {
   };
 
   const filteredServices = useMemo(() => {
-    if (activeCategory === "all") return SERVICES;
+    if (activeCategory === "all") {
+      return showAllServices ? SERVICES : SERVICES.filter((s) => s.isMain);
+    }
     return SERVICES.filter((s) => s.category === activeCategory);
-  }, [activeCategory]);
+  }, [activeCategory, showAllServices]);
 
   return (
     <main className="relative overflow-x-hidden bg-[#050505] text-foreground pb-20">
@@ -202,8 +210,8 @@ function Index() {
             className="mt-10 flex flex-col items-center gap-5 sm:flex-row"
           >
             <button
-              onClick={() => setIsBookingOpen(true)}
-              className="group inline-flex items-center gap-3 rounded-full px-8 py-4 text-sm font-semibold tracking-wide transition hover:bg-white/10 glass-strong shadow-[0_0_30px_rgba(255,255,255,0.15)]"
+              onClick={scrollToTeam}
+              className="group inline-flex items-center gap-3 rounded-full px-8 py-4 text-sm font-semibold tracking-wide transition hover:bg-white/10 glass-strong shadow-[0_0_30px_rgba(255,255,255,0.15)] cursor-pointer"
             >
               {L.heroCta}
               <ArrowRight className="size-4 transition group-hover:translate-x-1" />
@@ -293,10 +301,10 @@ function Index() {
           {filteredServices.map((s, i) => {
             const roleBadgeStyle =
               s.category === "vip"
-                ? "border-amber-400/40 bg-amber-400/15 text-amber-300"
+                ? "border-amber-400/60 bg-black/85 text-amber-300 shadow-[0_0_15px_rgba(251,191,36,0.3)]"
                 : s.category === "top"
-                  ? "border-sky-400/40 bg-sky-400/15 text-sky-300"
-                  : "border-white/15 bg-white/5 text-muted-foreground";
+                  ? "border-sky-400/60 bg-black/85 text-sky-300 shadow-[0_0_15px_rgba(56,189,248,0.3)]"
+                  : "border-white/30 bg-black/85 text-white shadow-[0_0_10px_rgba(0,0,0,0.6)]";
 
             const roleLabel =
               s.category === "vip" ? "VIP" : s.category === "top" ? "TOP BARBER" : "BARBER";
@@ -311,7 +319,13 @@ function Index() {
                 className="group flex flex-col justify-between overflow-hidden rounded-[2rem] glass transition-all duration-300 hover:bg-white/[0.08] hover:border-white/20 hover:-translate-y-1"
               >
                 {/* Service photo */}
-                <div className="relative overflow-hidden aspect-[16/10]">
+                <div
+                  onClick={() => {
+                    setLightboxPhotos(filteredServices.map((srv) => srv.photo));
+                    setLightboxIndex(i);
+                  }}
+                  className="relative overflow-hidden aspect-[16/10] cursor-pointer"
+                >
                   <img
                     src={s.photo}
                     alt={lang === "uz" ? s.nameUz : s.name}
@@ -327,6 +341,7 @@ function Index() {
                       {roleLabel}
                     </span>
                   </div>
+                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
 
                 <div className="p-6 flex flex-col flex-grow justify-between gap-4">
@@ -356,11 +371,29 @@ function Index() {
           })}
         </div>
 
-        {/* Choose Master Generic Scroll Button */}
-        <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4 text-center">
+        {/* Actions: Show All / Collapse + Choose Master */}
+        <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 text-center">
+          {activeCategory === "all" && (
+            <button
+              onClick={() => setShowAllServices((prev) => !prev)}
+              className="inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-xs font-semibold uppercase tracking-wider liquid-glass-btn hover:scale-105 transition cursor-pointer"
+            >
+              <span>
+                {showAllServices
+                  ? L.collapseServices
+                  : `${L.showAllServices} (${SERVICES.length})`}
+              </span>
+              {showAllServices ? (
+                <ChevronUp className="size-4" />
+              ) : (
+                <ChevronDown className="size-4" />
+              )}
+            </button>
+          )}
+
           <button
             onClick={scrollToTeam}
-            className="group inline-flex items-center gap-3 rounded-full bg-primary px-8 py-4 text-xs font-semibold uppercase tracking-wider text-primary-foreground shadow-[0_0_30px_rgba(255,255,255,0.2)] transition-all duration-300 hover:scale-105 active:scale-95"
+            className="group inline-flex items-center gap-3 rounded-full bg-primary px-8 py-3.5 text-xs font-semibold uppercase tracking-wider text-primary-foreground shadow-[0_0_30px_rgba(255,255,255,0.2)] transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
           >
             <span>{L.chooseMaster}</span>
             <ArrowRight className="size-4 rotate-90 transition-transform group-hover:translate-y-1" />
@@ -584,7 +617,12 @@ function Index() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.6, delay: i * 0.05 }}
-              className={`mb-4 overflow-hidden rounded-3xl border border-white/10 ${
+              onClick={() => {
+                setLightboxPhotos(LOOKBOOK);
+                setLightboxIndex(i);
+              }}
+              style={{ breakInside: "avoid" }}
+              className={`break-inside-avoid mb-4 cursor-pointer overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] group relative transition-all duration-300 hover:border-white/25 hover:bg-white/[0.06] ${
                 i % 3 === 0 ? "aspect-[3/4]" : i % 3 === 1 ? "aspect-square" : "aspect-[4/5]"
               }`}
             >
@@ -593,8 +631,13 @@ function Index() {
                 alt={`Работа мастеров ELEVEN ${i + 1}`}
                 loading="lazy"
                 decoding="async"
-                className="size-full object-cover grayscale transition duration-700 hover:scale-105 hover:grayscale-0"
+                className="size-full object-cover grayscale transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5">
+                <span className="text-xs font-semibold uppercase tracking-wider text-white">
+                  ELEVEN Style #{i + 1}
+                </span>
+              </div>
             </motion.div>
           ))}
         </div>
@@ -723,20 +766,8 @@ function Index() {
             transition={{ duration: 0.6 }}
             className="relative overflow-hidden rounded-2xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] bg-white/5"
           >
-            <a
-              href="https://yandex.uz/maps/10334/samarkand/?utm_medium=mapframe&utm_source=maps"
-              className="absolute top-0 text-xs text-[#eee] opacity-0 pointer-events-none"
-            >
-              Самарканд
-            </a>
-            <a
-              href="https://yandex.uz/maps/10334/samarkand/?from=mapframe&ll=66.923681%2C39.646072&mode=routes&rtext=39.646337%2C66.923655~39.646232%2C66.924297&rtt=auto&ruri=ymapsbm1%3A%2F%2Forg%3Foid%3D242105212925~ymapsbm1%3A%2F%2Forg%3Foid%3D93382537025&utm_medium=mapframe&utm_source=maps&z=19.06"
-              className="absolute top-3.5 text-xs text-[#eee] opacity-0 pointer-events-none"
-            >
-              Atlas: как доехать на автомобиле, общественным транспортом или пешком – Яндекс Карты
-            </a>
             <iframe
-              src="https://yandex.uz/map-widget/v1/?from=mapframe&ll=66.923681%2C39.646072&mode=routes&rtext=39.646337%2C66.923655~39.646232%2C66.924297&rtt=auto&ruri=ymapsbm1%3A%2F%2Forg%3Foid%3D242105212925~ymapsbm1%3A%2F%2Forg%3Foid%3D93382537025&z=19.06"
+              src="https://yandex.uz/map-widget/v1/?from=mapframe&ll=66.923753%2C39.646396&mode=poi&poi%5Bpoint%5D=66.923656%2C39.646335&poi%5Buri%5D=ymapsbm1%3A%2F%2Forg%3Foid%3D242105212925&z=18.82"
               title={L.mapTitle}
               className="relative w-full h-64 md:h-96 lg:h-full lg:min-h-[420px]"
               style={{ border: 0 }}
@@ -749,6 +780,14 @@ function Index() {
 
       {/* Shared Footer */}
       <Footer lang={lang} />
+
+      {/* Fullscreen Lightbox for Lookbook and Services */}
+      <LightboxModal
+        photos={lightboxPhotos}
+        currentIndex={lightboxIndex}
+        onClose={() => setLightboxIndex(null)}
+        onSelectIndex={(idx) => setLightboxIndex(idx)}
+      />
 
       {/* Master Modal */}
       <MasterModal

@@ -10,8 +10,8 @@ export const TIME_SLOTS = (() => {
 })();
 
 export const ADDRESS = {
-  ru: "ул. Амира Тимура, 224, ТРЦ «Атлас»",
-  uz: "Amir Temur ko'chasi, 224, Atlas savdo markazi",
+  ru: "ул. Амира Тимура, 224 (ориентир: ТРЦ «Атлас»)",
+  uz: "Amir Temur ko'chasi, 224 (mo'ljal: Atlas SM)",
 };
 
 export const ADDRESS_CITY = {
@@ -70,7 +70,7 @@ const dict = {
 
     /* contacts */
     contactsTitle: "Контакты",
-    contactsSubtitle: "Ждем вас каждый день в центре Самарканда в ТРЦ «Атлас»",
+    contactsSubtitle: "Ждем вас каждый день в Самарканде (ул. Амира Тимура, 224, ориентир: ТРЦ «Атлас»)",
     address: "Адрес",
     workHours: "Часы работы",
     phone: "Телефон",
@@ -99,6 +99,8 @@ const dict = {
     close: "Закрыть",
     backToHome: "На главную",
     viewAll: "Смотреть все",
+    showAllServices: "Показать все услуги",
+    collapseServices: "Свернуть услуги",
     bookNow: "Записаться онлайн",
   },
   uz: {
@@ -141,7 +143,7 @@ const dict = {
 
     /* contacts */
     contactsTitle: "Kontaktlar",
-    contactsSubtitle: "Samarqand markazidagi «Atlas» savdo markazida har kuni kutamiz",
+    contactsSubtitle: "Samarqandda har kuni kutamiz (Amir Temur ko'chasi, 224, mo'ljal: Atlas SM)",
     address: "Manzil",
     workHours: "Ish vaqti",
     phone: "Telefon",
@@ -170,6 +172,8 @@ const dict = {
     close: "Yopish",
     backToHome: "Bosh sahifaga",
     viewAll: "Barchasini ko'rish",
+    showAllServices: "Barcha xizmatlarni ko'rsatish",
+    collapseServices: "Xizmatlarni qisqartirish",
     bookNow: "Onlayn yozilish",
   },
 } as const;

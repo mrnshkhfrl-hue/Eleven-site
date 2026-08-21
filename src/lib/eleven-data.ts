@@ -9,6 +9,7 @@ export type Service = {
   minutes: number;
   category: CategoryId;
   photo: string;
+  isMain?: boolean;
 };
 
 export type CategoryId = "vip" | "top" | "barber";
@@ -52,6 +53,7 @@ export const SERVICES: Service[] = [
     minutes: 120,
     category: "vip",
     photo: P("photo-1622286342621-4bd786c2447c"),
+    isMain: true,
   },
   {
     id: "bobur-groom",
@@ -76,6 +78,7 @@ export const SERVICES: Service[] = [
     minutes: 60,
     category: "top",
     photo: P("photo-1503443207922-dff7d543fd0e"),
+    isMain: true,
   },
   {
     id: "top-haircut-beard",
@@ -87,6 +90,7 @@ export const SERVICES: Service[] = [
     minutes: 90,
     category: "top",
     photo: P("photo-1621605815971-fbc98d665033"),
+    isMain: true,
   },
   {
     id: "top-kids",
@@ -111,6 +115,7 @@ export const SERVICES: Service[] = [
     minutes: 45,
     category: "barber",
     photo: P("photo-1503951914875-452162b0f3f1"),
+    isMain: true,
   },
   {
     id: "barber-wedding",
@@ -134,6 +139,7 @@ export const SERVICES: Service[] = [
     minutes: 30,
     category: "barber",
     photo: P("photo-1585747860715-2ba37e788b70"),
+    isMain: true,
   },
   {
     id: "barber-styling",
@@ -167,6 +173,7 @@ export const SERVICES: Service[] = [
     minutes: 30,
     category: "barber",
     photo: P("photo-1519085360753-af0119f7cbe7"),
+    isMain: true,
   },
   {
     id: "barber-wax",

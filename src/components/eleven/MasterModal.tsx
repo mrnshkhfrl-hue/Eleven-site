@@ -5,6 +5,7 @@ import { ArrowRight, Phone, X, Clock, Award, Users, Sparkles } from "lucide-reac
 
 import { widgetUrl, type Barber } from "@/lib/eleven-data";
 import { t, PHONE, PHONE_HREF, type Lang } from "@/lib/eleven-i18n";
+import { LightboxModal } from "@/components/eleven/LightboxModal";
 
 type Props = {
   master: Barber | null;
@@ -15,23 +16,25 @@ type Props = {
 
 export const getRoleBadge = (role: string) => {
   if (role === "VIP Barber") {
-    return "border-amber-400/40 bg-amber-400/15 text-amber-300 shadow-[0_0_15px_rgba(251,191,36,0.15)]";
+    return "border-amber-400/60 bg-black/85 text-amber-300 font-semibold shadow-[0_0_15px_rgba(251,191,36,0.3)]";
   }
   if (role === "TOP Barber") {
-    return "border-sky-400/40 bg-sky-400/15 text-sky-300 shadow-[0_0_15px_rgba(56,189,248,0.15)]";
+    return "border-sky-400/60 bg-black/85 text-sky-300 font-semibold shadow-[0_0_15px_rgba(56,189,248,0.3)]";
   }
-  return "border-white/15 bg-white/5 text-muted-foreground";
+  return "border-white/30 bg-black/85 text-white font-semibold shadow-[0_0_10px_rgba(0,0,0,0.6)]";
 };
 
 export function MasterModal({ master, isOpen = false, onClose, lang }: Props) {
   const L = t(lang);
   const [booking, setBooking] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const isVisible = Boolean(master || isOpen);
 
   useEffect(() => {
     if (master) {
       setBooking(false);
+      setLightboxIndex(null);
     }
   }, [master]);
 
@@ -164,7 +167,7 @@ export function MasterModal({ master, isOpen = false, onClose, lang }: Props) {
                     </div>
                   </div>
 
-                  {/* Mini portfolio */}
+                  {/* Mini portfolio with clickable Lightbox */}
                   <div>
                     <p className="mb-2 text-[10px] tracking-[0.25em] text-muted-foreground uppercase">
                       {L.portfolio}
@@ -173,15 +176,17 @@ export function MasterModal({ master, isOpen = false, onClose, lang }: Props) {
                       {master.portfolio.map((src, i) => (
                         <div
                           key={`${master.id}-${i}`}
-                          className="overflow-hidden rounded-2xl border border-white/10"
+                          onClick={() => setLightboxIndex(i)}
+                          className="cursor-pointer overflow-hidden rounded-2xl border border-white/10 transition-transform duration-300 hover:scale-105 active:scale-95 group relative"
                         >
                           <img
                             src={src}
                             alt={`${master.name} — работа ${i + 1}`}
                             loading="lazy"
                             decoding="async"
-                            className="aspect-square w-full object-cover grayscale transition duration-700 hover:grayscale-0"
+                            className="aspect-square w-full object-cover grayscale transition duration-500 group-hover:grayscale-0"
                           />
+                          <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
                         </div>
                       ))}
                     </div>
@@ -250,6 +255,16 @@ export function MasterModal({ master, isOpen = false, onClose, lang }: Props) {
             )}
           </motion.div>
         </motion.div>
+      )}
+
+      {/* Fullscreen Lightbox for Master's Portfolio */}
+      {master && (
+        <LightboxModal
+          photos={master.portfolio}
+          currentIndex={lightboxIndex}
+          onClose={() => setLightboxIndex(null)}
+          onSelectIndex={(idx) => setLightboxIndex(idx)}
+        />
       )}
     </AnimatePresence>
   );

@@ -14,6 +14,7 @@ import {
 import { Navbar } from "@/components/eleven/Navbar";
 import { Footer } from "@/components/eleven/Footer";
 import { MasterModal } from "@/components/eleven/MasterModal";
+import { LightboxModal } from "@/components/eleven/LightboxModal";
 import { t, type Lang } from "@/lib/eleven-i18n";
 
 export const Route = createFileRoute("/services")({
@@ -38,6 +39,7 @@ export const Route = createFileRoute("/services")({
 function ServicesPage() {
   const [lang, setLang] = useState<Lang>("ru");
   const [activeCategory, setActiveCategory] = useState<CategoryId | "all">("all");
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [master, setMaster] = useState<Barber | null>(null);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const L = t(lang);
@@ -116,10 +118,10 @@ function ServicesPage() {
           {filteredServices.map((service, idx) => {
             const roleBadgeStyle =
               service.category === "vip"
-                ? "border-amber-400/40 bg-amber-400/15 text-amber-300"
+                ? "border-amber-400/60 bg-black/85 text-amber-300 shadow-[0_0_15px_rgba(251,191,36,0.3)]"
                 : service.category === "top"
-                  ? "border-sky-400/40 bg-sky-400/15 text-sky-300"
-                  : "border-white/15 bg-white/5 text-muted-foreground";
+                  ? "border-sky-400/60 bg-black/85 text-sky-300 shadow-[0_0_15px_rgba(56,189,248,0.3)]"
+                  : "border-white/30 bg-black/85 text-white shadow-[0_0_10px_rgba(0,0,0,0.6)]";
 
             const roleLabel =
               service.category === "vip" ? "VIP" : service.category === "top" ? "TOP BARBER" : "BARBER";
@@ -133,7 +135,10 @@ function ServicesPage() {
                 className="group flex flex-col justify-between overflow-hidden rounded-[2rem] glass transition-all duration-300 hover:bg-white/[0.08] hover:border-white/20 hover:-translate-y-1"
               >
                 {/* Photo */}
-                <div className="relative overflow-hidden aspect-[16/10]">
+                <div
+                  onClick={() => setLightboxIndex(idx)}
+                  className="relative overflow-hidden aspect-[16/10] cursor-pointer"
+                >
                   <img
                     src={service.photo}
                     alt={lang === "uz" ? service.nameUz : service.name}
@@ -149,6 +154,7 @@ function ServicesPage() {
                       {roleLabel}
                     </span>
                   </div>
+                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
 
                 {/* Content */}
@@ -224,6 +230,14 @@ function ServicesPage() {
 
       {/* Shared Footer */}
       <Footer lang={lang} />
+
+      {/* Fullscreen Lightbox for Services */}
+      <LightboxModal
+        photos={filteredServices.map((s) => s.photo)}
+        currentIndex={lightboxIndex}
+        onClose={() => setLightboxIndex(null)}
+        onSelectIndex={(idx) => setLightboxIndex(idx)}
+      />
 
       {/* Master Booking Modal */}
       <MasterModal
