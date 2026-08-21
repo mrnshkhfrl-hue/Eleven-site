@@ -91,6 +91,8 @@ const dict = {
     bookingTitle: "ОНЛАЙН-ЗАПИСЬ",
     bio: "О мастере",
     tapMaster: "Нажми на мастера, чтобы посмотреть работы и записаться",
+    selectServiceAndMaster: "Выберите мастера или услугу для записи",
+    viewMasters: "Посмотреть мастеров",
 
     /* misc */
     menu: "Меню",
@@ -160,6 +162,8 @@ const dict = {
     bookingTitle: "ONLAYN YOZILISH",
     bio: "Usta haqida",
     tapMaster: "Ishlarini ko'rish va yozilish uchun ustaga bosing",
+    selectServiceAndMaster: "Yozilish uchun usta yoki xizmatni tanlang",
+    viewMasters: "Ustalarni ko'rish",
 
     /* misc */
     menu: "Menyu",

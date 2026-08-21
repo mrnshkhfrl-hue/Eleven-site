@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "motion/react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowRight,
   ChevronLeft,
@@ -13,19 +13,22 @@ import {
   Phone,
   Scissors,
   Sparkles,
+  Users,
 } from "lucide-react";
 
 import {
   BARBERS,
+  CATEGORIES,
   LOOKBOOK,
   SERVICES,
   formatPrice,
   formatTime,
   type Barber,
+  type CategoryId,
 } from "@/lib/eleven-data";
 import { Navbar } from "@/components/eleven/Navbar";
 import { Footer } from "@/components/eleven/Footer";
-import { MasterModal } from "@/components/eleven/MasterModal";
+import { MasterModal, getRoleBadge } from "@/components/eleven/MasterModal";
 import {
   ADDRESS,
   ADDRESS_CITY,
@@ -62,19 +65,11 @@ export const Route = createFileRoute("/")({
 const HERO_IMG =
   "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=1920&q=80";
 
-/* Featured services for home teaser */
-const FEATURED_SERVICES = [
-  SERVICES.find((s) => s.id === "top-1")!,
-  SERVICES.find((s) => s.id === "top-2")!,
-  SERVICES.find((s) => s.id === "barber-wedding")!,
-  SERVICES.find((s) => s.id === "bobur-haircut")!,
-  SERVICES.find((s) => s.id === "barber-facial")!,
-  SERVICES.find((s) => s.id === "barber-styling")!,
-].filter(Boolean);
-
 function Index() {
   const [lang, setLang] = useState<Lang>("ru");
+  const [activeCategory, setActiveCategory] = useState<CategoryId | "all">("all");
   const [master, setMaster] = useState<Barber | null>(null);
+  const [isBookingOpen, setIsBookingOpen] = useState(false);
   const L = t(lang);
 
   const carouselRef = useRef<HTMLDivElement>(null);
@@ -142,10 +137,22 @@ function Index() {
     setIsDragging(false);
   };
 
+  const scrollToTeam = () => {
+    const el = document.getElementById("team");
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const filteredServices = useMemo(() => {
+    if (activeCategory === "all") return SERVICES;
+    return SERVICES.filter((s) => s.category === activeCategory);
+  }, [activeCategory]);
+
   return (
     <main className="relative overflow-x-hidden bg-[#050505] text-foreground pb-20">
       {/* Shared Navbar */}
-      <Navbar lang={lang} setLang={setLang} onBookClick={() => setMaster(BARBERS[0])} />
+      <Navbar lang={lang} setLang={setLang} onBookClick={() => setIsBookingOpen(true)} />
 
       {/* ─────────────────────── HERO ─────────────────────── */}
       <section id="home" className="relative flex min-h-screen items-center justify-center overflow-hidden">
@@ -195,7 +202,7 @@ function Index() {
             className="mt-10 flex flex-col items-center gap-5 sm:flex-row"
           >
             <button
-              onClick={() => setMaster(BARBERS[0])}
+              onClick={() => setIsBookingOpen(true)}
               className="group inline-flex items-center gap-3 rounded-full px-8 py-4 text-sm font-semibold tracking-wide transition hover:bg-white/10 glass-strong shadow-[0_0_30px_rgba(255,255,255,0.15)]"
             >
               {L.heroCta}
@@ -213,21 +220,25 @@ function Index() {
         </div>
       </section>
 
-      {/* ─────────────────────── SERVICES (Наши услуги) ─────────────────────── */}
+      {/* ─────────────────────── SERVICES (Наши услуги — INFO PRICE LIST) ─────────────────────── */}
       <section
         id="services"
         className="mx-auto w-[92%] max-w-6xl py-28"
         style={{ contentVisibility: "auto", containIntrinsicSize: "auto 800px" }}
       >
-        <div className="flex flex-wrap items-end justify-between gap-4 mb-10">
+        <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.6 }}
           >
+            <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[10px] font-medium tracking-[0.3em] uppercase glass mb-3">
+              <Scissors className="size-3 text-muted-foreground" />
+              <span>PRICE LIST</span>
+            </div>
             <h2 className="font-display text-4xl tracking-wide sm:text-6xl">{L.servicesTitle}</h2>
-            <p className="mt-2 max-w-xl text-sm text-muted-foreground">{L.servicesHint}</p>
+            <p className="mt-2 max-w-xl text-sm text-muted-foreground">{L.servicesSubtitle}</p>
           </motion.div>
 
           <Link
@@ -239,67 +250,125 @@ function Index() {
           </Link>
         </div>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {FEATURED_SERVICES.map((s, i) => (
-            <motion.div
-              key={s.id}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.5, delay: i * 0.06 }}
-              className="group overflow-hidden rounded-[2rem] glass transition hover:bg-white/[0.08]"
-            >
-              {/* Service photo */}
-              <div className="overflow-hidden aspect-[16/10]">
-                <img
-                  src={s.photo}
-                  alt={lang === "uz" ? s.nameUz : s.name}
-                  loading="lazy"
-                  decoding="async"
-                  className="size-full object-cover grayscale transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
-                />
-              </div>
+        {/* 3 Strict Category Switcher Tabs */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mb-8 flex flex-wrap items-center gap-2 sm:gap-3"
+        >
+          <button
+            onClick={() => setActiveCategory("all")}
+            className={`rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-wider transition-all duration-300 ${
+              activeCategory === "all"
+                ? "bg-primary text-primary-foreground shadow-[0_0_20px_rgba(255,255,255,0.2)] scale-105"
+                : "glass text-muted-foreground hover:text-foreground hover:bg-white/[0.08]"
+            }`}
+          >
+            {L.allCategories} ({SERVICES.length})
+          </button>
+          {CATEGORIES.map((cat) => {
+            const count = SERVICES.filter((s) => s.category === cat.id).length;
+            const label = lang === "uz" ? cat.labelUz : cat.label;
+            const isCatActive = activeCategory === cat.id;
+            return (
+              <button
+                key={cat.id}
+                onClick={() => setActiveCategory(cat.id)}
+                className={`rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-wider transition-all duration-300 ${
+                  isCatActive
+                    ? "bg-primary text-primary-foreground shadow-[0_0_20px_rgba(255,255,255,0.2)] scale-105"
+                    : "glass text-muted-foreground hover:text-foreground hover:bg-white/[0.08]"
+                }`}
+              >
+                {label} ({count})
+              </button>
+            );
+          })}
+        </motion.div>
 
-              <div className="p-5 space-y-3">
-                {/* Name & price */}
-                <div className="flex items-start justify-between gap-3">
-                  <h3 className="text-base font-semibold">{lang === "uz" ? s.nameUz : s.name}</h3>
-                  <span className="shrink-0 text-sm font-semibold tabular-nums text-foreground/90">
-                    {formatPrice(s.price, s.isFromPrice, lang)}
-                  </span>
+        {/* Services Info Grid */}
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {filteredServices.map((s, i) => {
+            const roleBadgeStyle =
+              s.category === "vip"
+                ? "border-amber-400/40 bg-amber-400/15 text-amber-300"
+                : s.category === "top"
+                  ? "border-sky-400/40 bg-sky-400/15 text-sky-300"
+                  : "border-white/15 bg-white/5 text-muted-foreground";
+
+            const roleLabel =
+              s.category === "vip" ? "VIP" : s.category === "top" ? "TOP BARBER" : "BARBER";
+
+            return (
+              <motion.div
+                key={s.id}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.5, delay: i * 0.04 }}
+                className="group flex flex-col justify-between overflow-hidden rounded-[2rem] glass transition-all duration-300 hover:bg-white/[0.08] hover:border-white/20 hover:-translate-y-1"
+              >
+                {/* Service photo */}
+                <div className="relative overflow-hidden aspect-[16/10]">
+                  <img
+                    src={s.photo}
+                    alt={lang === "uz" ? s.nameUz : s.name}
+                    loading="lazy"
+                    decoding="async"
+                    className="size-full object-cover grayscale transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
+                  />
+                  <div className="absolute top-3 right-3">
+                    <span
+                      className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[9px] font-semibold uppercase tracking-wider backdrop-blur-md border ${roleBadgeStyle}`}
+                    >
+                      {s.category === "vip" && <Sparkles className="size-2.5" />}
+                      {roleLabel}
+                    </span>
+                  </div>
                 </div>
 
-                {/* Duration */}
-                <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
-                  <Clock className="size-3" /> {formatTime(s.minutes, lang)}
-                </span>
+                <div className="p-6 flex flex-col flex-grow justify-between gap-4">
+                  <div className="space-y-2">
+                    {/* Name */}
+                    <h3 className="text-base font-semibold tracking-tight">
+                      {lang === "uz" ? s.nameUz : s.name}
+                    </h3>
+                    {/* Description */}
+                    <p className="text-xs leading-relaxed text-muted-foreground">
+                      {lang === "uz" ? s.descUz : s.desc}
+                    </p>
+                  </div>
 
-                {/* Description */}
-                <p className="text-xs leading-relaxed text-muted-foreground line-clamp-2">
-                  {lang === "uz" ? s.descUz : s.desc}
-                </p>
+                  {/* Duration & Price info */}
+                  <div className="pt-3 border-t border-white/5 flex items-center justify-between">
+                    <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <Clock className="size-3.5" /> {formatTime(s.minutes, lang)}
+                    </span>
+                    <span className="text-base font-bold tabular-nums text-foreground">
+                      {formatPrice(s.price, s.isFromPrice, lang)}
+                    </span>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
 
-                {/* CTA */}
-                <button
-                  onClick={() => {
-                    const target =
-                      s.category === "bobur"
-                        ? BARBERS.find((b) => b.role === "Founder") || BARBERS[0]
-                        : BARBERS[0];
-                    setMaster(target);
-                  }}
-                  className="flex w-full items-center justify-center gap-2 rounded-2xl border border-white/10 py-3 text-xs font-medium tracking-wide text-foreground/80 transition hover:bg-white/[0.08] hover:text-foreground"
-                >
-                  {L.chooseMaster}
-                  <ArrowRight className="size-3.5" />
-                </button>
-              </div>
-            </motion.div>
-          ))}
+        {/* Choose Master Generic Scroll Button */}
+        <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4 text-center">
+          <button
+            onClick={scrollToTeam}
+            className="group inline-flex items-center gap-3 rounded-full bg-primary px-8 py-4 text-xs font-semibold uppercase tracking-wider text-primary-foreground shadow-[0_0_30px_rgba(255,255,255,0.2)] transition-all duration-300 hover:scale-105 active:scale-95"
+          >
+            <span>{L.chooseMaster}</span>
+            <ArrowRight className="size-4 rotate-90 transition-transform group-hover:translate-y-1" />
+          </button>
         </div>
 
         {/* Vibe info cards */}
-        <div className="mt-16 grid gap-4 sm:grid-cols-3">
+        <div className="mt-20 grid gap-4 sm:grid-cols-3">
           {[
             { icon: Droplets, t: L.cardCareT, d: L.cardCareD },
             { icon: Coffee, t: L.cardCoffeeT, d: L.cardCoffeeD },
@@ -324,7 +393,7 @@ function Index() {
       {/* ─────────────────────── TEAM (Horizontal Carousel with Liquid Glass) ─────────────────────── */}
       <section
         id="team"
-        className="pb-28"
+        className="pb-28 scroll-mt-24"
         style={{ contentVisibility: "auto", containIntrinsicSize: "auto 500px" }}
       >
         <div className="mx-auto mb-8 flex w-[92%] max-w-6xl flex-wrap items-end justify-between gap-4">
@@ -334,6 +403,10 @@ function Index() {
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.6 }}
           >
+            <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[10px] font-medium tracking-[0.3em] uppercase glass mb-3">
+              <Users className="size-3 text-muted-foreground" />
+              <span>OUR SPECIALISTS</span>
+            </div>
             <div className="flex items-center gap-3">
               <h2 className="font-display text-4xl tracking-wide sm:text-6xl">{L.teamTitle}</h2>
               <Link
@@ -416,24 +489,44 @@ function Index() {
                     setMaster(b);
                   }
                 }}
-                className="w-[68vw] shrink-0 snap-center overflow-hidden rounded-[2rem] text-left transition duration-300 hover:bg-white/[0.08] sm:w-64 glass"
+                className="w-[68vw] shrink-0 snap-center overflow-hidden rounded-[2rem] text-left transition-all duration-300 hover:bg-white/[0.08] hover:border-white/20 hover:-translate-y-1 sm:w-64 glass flex flex-col justify-between"
               >
-                <img
-                  src={b.photo}
-                  alt={b.name}
-                  loading="lazy"
-                  decoding="async"
-                  draggable={false}
-                  className="aspect-[3/4] w-full object-cover object-top grayscale transition duration-500 hover:grayscale-0 pointer-events-none"
-                />
-                <div className="p-4">
-                  <h3 className="text-sm font-semibold">{b.name}</h3>
-                  <p className="mt-0.5 text-[11px] tracking-[0.2em] text-muted-foreground uppercase">
-                    {b.role}
-                  </p>
-                  <p className="mt-1 text-[10px] text-muted-foreground">
-                    {L.experience}: {b.years} {L.years}
-                  </p>
+                <div className="relative aspect-[3/4] w-full overflow-hidden">
+                  <img
+                    src={b.photo}
+                    alt={b.name}
+                    loading="lazy"
+                    decoding="async"
+                    draggable={false}
+                    className="size-full object-cover object-top grayscale transition duration-500 hover:grayscale-0 pointer-events-none"
+                  />
+                  <div className="absolute top-3 left-3">
+                    <span
+                      className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider backdrop-blur-md border ${getRoleBadge(
+                        b.role
+                      )}`}
+                    >
+                      {b.role === "VIP Barber" && <Sparkles className="size-2.5" />}
+                      {b.role}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="p-4 space-y-2">
+                  <div>
+                    <h3 className="text-sm font-semibold">{b.name}</h3>
+                    <p className="mt-0.5 text-[11px] tracking-[0.2em] text-muted-foreground uppercase">
+                      {b.role}
+                    </p>
+                  </div>
+                  <div className="flex items-center justify-between pt-2 border-t border-white/5 text-[10px] text-muted-foreground">
+                    <span>
+                      {L.experience}: {b.years} {L.years}
+                    </span>
+                    <span className="text-foreground font-semibold uppercase tracking-wider inline-flex items-center gap-0.5">
+                      {L.book} <ArrowRight className="size-2.5" />
+                    </span>
+                  </div>
                 </div>
               </motion.button>
             ))}
@@ -658,7 +751,15 @@ function Index() {
       <Footer lang={lang} />
 
       {/* Master Modal */}
-      <MasterModal master={master} onClose={() => setMaster(null)} lang={lang} />
+      <MasterModal
+        master={master}
+        isOpen={isBookingOpen}
+        onClose={() => {
+          setMaster(null);
+          setIsBookingOpen(false);
+        }}
+        lang={lang}
+      />
     </main>
   );
 }

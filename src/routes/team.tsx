@@ -1,12 +1,12 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import { useState, useMemo } from "react";
-import { Award, Users, ArrowRight } from "lucide-react";
+import { Award, Users, ArrowRight, Sparkles } from "lucide-react";
 
 import { BARBERS, type Barber } from "@/lib/eleven-data";
 import { Navbar } from "@/components/eleven/Navbar";
 import { Footer } from "@/components/eleven/Footer";
-import { MasterModal } from "@/components/eleven/MasterModal";
+import { MasterModal, getRoleBadge } from "@/components/eleven/MasterModal";
 import { t, type Lang } from "@/lib/eleven-i18n";
 
 export const Route = createFileRoute("/team")({
@@ -17,7 +17,7 @@ export const Route = createFileRoute("/team")({
       {
         name: "description",
         content:
-          "Познакомьтесь с командой топ-барберов ELEVEN в Самарканде. 10 мастеров, от барберов до основателя Бобура Вафаева. Портфолио и онлайн-запись.",
+          "Познакомьтесь с командой мастеров ELEVEN в Самарканде: VIP Barber Бобур Вафаев, TOP Barber Шахриёр Мансуров и 8 профессиональных барберов. Портфолио и онлайн-запись.",
       },
       { property: "og:title", content: "Команда мастеров — ELEVEN Барбершоп" },
       {
@@ -32,9 +32,10 @@ function TeamPage() {
   const [lang, setLang] = useState<Lang>("ru");
   const [roleFilter, setRoleFilter] = useState<string>("all");
   const [master, setMaster] = useState<Barber | null>(null);
+  const [isBookingOpen, setIsBookingOpen] = useState(false);
   const L = t(lang);
 
-  const roles = ["all", "Founder", "Top Barber", "Barber"];
+  const roles = ["all", "VIP Barber", "TOP Barber", "Barber"];
 
   const filteredBarbers = useMemo(() => {
     if (roleFilter === "all") return BARBERS;
@@ -44,7 +45,7 @@ function TeamPage() {
   return (
     <main className="relative min-h-screen overflow-x-hidden bg-[#050505] text-foreground pt-28 pb-20">
       {/* Sticky Navbar */}
-      <Navbar lang={lang} setLang={setLang} onBookClick={() => setMaster(BARBERS[0])} />
+      <Navbar lang={lang} setLang={setLang} onBookClick={() => setIsBookingOpen(true)} />
 
       {/* Hero Header */}
       <div className="mx-auto w-[92%] max-w-6xl pt-6 pb-12">
@@ -73,19 +74,23 @@ function TeamPage() {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="mt-10 flex flex-wrap items-center gap-2.5"
         >
-          {roles.map((role) => (
-            <button
-              key={role}
-              onClick={() => setRoleFilter(role)}
-              className={`rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-wider transition-all duration-300 ${
-                roleFilter === role
-                  ? "bg-primary text-primary-foreground shadow-[0_0_20px_rgba(255,255,255,0.2)] scale-105"
-                  : "glass text-muted-foreground hover:text-foreground hover:bg-white/[0.08]"
-              }`}
-            >
-              {role === "all" ? `${L.allCategories} (${BARBERS.length})` : role}
-            </button>
-          ))}
+          {roles.map((role) => {
+            const count = role === "all" ? BARBERS.length : BARBERS.filter((b) => b.role === role).length;
+            const isRoleActive = roleFilter === role;
+            return (
+              <button
+                key={role}
+                onClick={() => setRoleFilter(role)}
+                className={`rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-wider transition-all duration-300 ${
+                  isRoleActive
+                    ? "bg-primary text-primary-foreground shadow-[0_0_20px_rgba(255,255,255,0.2)] scale-105"
+                    : "glass text-muted-foreground hover:text-foreground hover:bg-white/[0.08]"
+                }`}
+              >
+                {role === "all" ? `${L.allCategories} (${count})` : `${role} (${count})`}
+              </button>
+            );
+          })}
         </motion.div>
       </div>
 
@@ -109,8 +114,15 @@ function TeamPage() {
                   decoding="async"
                   className="size-full object-cover object-top grayscale transition duration-500 group-hover:scale-105 group-hover:grayscale-0"
                 />
-                <div className="absolute top-3 right-3 rounded-full px-3 py-1 text-[10px] font-semibold tracking-wider uppercase backdrop-blur-md bg-black/60 border border-white/10 text-white">
-                  {b.role}
+                <div className="absolute top-3 left-3">
+                  <span
+                    className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[9px] font-semibold uppercase tracking-wider backdrop-blur-md border ${getRoleBadge(
+                      b.role
+                    )}`}
+                  >
+                    {b.role === "VIP Barber" && <Sparkles className="size-2.5" />}
+                    {b.role}
+                  </span>
                 </div>
               </div>
 
@@ -141,7 +153,15 @@ function TeamPage() {
       <Footer lang={lang} />
 
       {/* Master Modal */}
-      <MasterModal master={master} onClose={() => setMaster(null)} lang={lang} />
+      <MasterModal
+        master={master}
+        isOpen={isBookingOpen}
+        onClose={() => {
+          setMaster(null);
+          setIsBookingOpen(false);
+        }}
+        lang={lang}
+      />
     </main>
   );
 }

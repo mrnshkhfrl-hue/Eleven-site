@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import { useState, useMemo } from "react";
-import { ArrowRight, Clock, Sparkles, Scissors, Check, Award } from "lucide-react";
+import { ArrowRight, Clock, Scissors, Sparkles, Users } from "lucide-react";
 
 import {
   CATEGORIES,
@@ -10,7 +10,6 @@ import {
   formatTime,
   type CategoryId,
   type Barber,
-  BARBERS,
 } from "@/lib/eleven-data";
 import { Navbar } from "@/components/eleven/Navbar";
 import { Footer } from "@/components/eleven/Footer";
@@ -40,6 +39,7 @@ function ServicesPage() {
   const [lang, setLang] = useState<Lang>("ru");
   const [activeCategory, setActiveCategory] = useState<CategoryId | "all">("all");
   const [master, setMaster] = useState<Barber | null>(null);
+  const [isBookingOpen, setIsBookingOpen] = useState(false);
   const L = t(lang);
 
   const filteredServices = useMemo(() => {
@@ -50,7 +50,7 @@ function ServicesPage() {
   return (
     <main className="relative min-h-screen overflow-x-hidden bg-[#050505] text-foreground pt-28 pb-20">
       {/* Sticky Navbar */}
-      <Navbar lang={lang} setLang={setLang} onBookClick={() => setMaster(BARBERS[0])} />
+      <Navbar lang={lang} setLang={setLang} onBookClick={() => setIsBookingOpen(true)} />
 
       {/* Hero Header */}
       <div className="mx-auto w-[92%] max-w-6xl pt-6 pb-12">
@@ -92,12 +92,13 @@ function ServicesPage() {
           {CATEGORIES.map((cat) => {
             const count = SERVICES.filter((s) => s.category === cat.id).length;
             const label = lang === "uz" ? cat.labelUz : cat.label;
+            const isCatActive = activeCategory === cat.id;
             return (
               <button
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}
                 className={`rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-wider transition-all duration-300 ${
-                  activeCategory === cat.id
+                  isCatActive
                     ? "bg-primary text-primary-foreground shadow-[0_0_20px_rgba(255,255,255,0.2)] scale-105"
                     : "glass text-muted-foreground hover:text-foreground hover:bg-white/[0.08]"
                 }`}
@@ -109,51 +110,60 @@ function ServicesPage() {
         </motion.div>
       </div>
 
-      {/* Services Grid */}
+      {/* Services Grid (Pure Info Price List) */}
       <div className="mx-auto w-[92%] max-w-6xl pb-24">
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredServices.map((service, idx) => (
-            <motion.div
-              key={service.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: idx * 0.04 }}
-              className="group flex flex-col justify-between overflow-hidden rounded-[2rem] glass transition-all duration-300 hover:bg-white/[0.08] hover:border-white/20 hover:-translate-y-1"
-            >
-              {/* Photo */}
-              <div className="relative overflow-hidden aspect-[16/10]">
-                <img
-                  src={service.photo}
-                  alt={lang === "uz" ? service.nameUz : service.name}
-                  loading="lazy"
-                  decoding="async"
-                  className="size-full object-cover grayscale transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
-                />
-                <div className="absolute top-3 right-3 rounded-full px-3 py-1 text-[10px] font-semibold tracking-wider uppercase backdrop-blur-md bg-black/60 border border-white/10 text-white">
-                  {service.category === "bobur"
-                    ? "VIP"
-                    : service.category === "top"
-                      ? "TOP"
-                      : "BARBER"}
-                </div>
-              </div>
+          {filteredServices.map((service, idx) => {
+            const roleBadgeStyle =
+              service.category === "vip"
+                ? "border-amber-400/40 bg-amber-400/15 text-amber-300"
+                : service.category === "top"
+                  ? "border-sky-400/40 bg-sky-400/15 text-sky-300"
+                  : "border-white/15 bg-white/5 text-muted-foreground";
 
-              {/* Content */}
-              <div className="p-6 flex flex-col flex-grow justify-between gap-4">
-                <div className="space-y-2">
-                  <div className="flex items-start justify-between gap-2">
+            const roleLabel =
+              service.category === "vip" ? "VIP" : service.category === "top" ? "TOP BARBER" : "BARBER";
+
+            return (
+              <motion.div
+                key={service.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: idx * 0.04 }}
+                className="group flex flex-col justify-between overflow-hidden rounded-[2rem] glass transition-all duration-300 hover:bg-white/[0.08] hover:border-white/20 hover:-translate-y-1"
+              >
+                {/* Photo */}
+                <div className="relative overflow-hidden aspect-[16/10]">
+                  <img
+                    src={service.photo}
+                    alt={lang === "uz" ? service.nameUz : service.name}
+                    loading="lazy"
+                    decoding="async"
+                    className="size-full object-cover grayscale transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
+                  />
+                  <div className="absolute top-3 right-3">
+                    <span
+                      className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[9px] font-semibold uppercase tracking-wider backdrop-blur-md border ${roleBadgeStyle}`}
+                    >
+                      {service.category === "vip" && <Sparkles className="size-2.5" />}
+                      {roleLabel}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="p-6 flex flex-col flex-grow justify-between gap-4">
+                  <div className="space-y-2">
                     <h3 className="text-lg font-semibold tracking-tight">
                       {lang === "uz" ? service.nameUz : service.name}
                     </h3>
+                    <p className="text-xs leading-relaxed text-muted-foreground">
+                      {lang === "uz" ? service.descUz : service.desc}
+                    </p>
                   </div>
 
-                  <p className="text-xs leading-relaxed text-muted-foreground">
-                    {lang === "uz" ? service.descUz : service.desc}
-                  </p>
-                </div>
-
-                <div className="space-y-4 pt-3 border-t border-white/5">
-                  <div className="flex items-center justify-between">
+                  {/* Duration & Price */}
+                  <div className="pt-3 border-t border-white/5 flex items-center justify-between">
                     <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
                       <Clock className="size-3.5" />
                       <span>{formatTime(service.minutes, lang)}</span>
@@ -162,27 +172,22 @@ function ServicesPage() {
                       {formatPrice(service.price, service.isFromPrice, lang)}
                     </span>
                   </div>
-
-                  <button
-                    onClick={() => {
-                      // Match suitable master
-                      const targetMaster =
-                        service.category === "bobur"
-                          ? BARBERS.find((b) => b.role === "Founder") || BARBERS[0]
-                          : service.category === "top"
-                            ? BARBERS.find((b) => b.role === "Top Barber") || BARBERS[0]
-                            : BARBERS[0];
-                      setMaster(targetMaster);
-                    }}
-                    className="flex w-full items-center justify-center gap-2 rounded-2xl bg-white/[0.06] border border-white/10 py-3 text-xs font-medium tracking-wider uppercase text-foreground transition-all duration-300 hover:bg-primary hover:text-primary-foreground hover:border-transparent active:scale-[0.98]"
-                  >
-                    <span>{L.book}</span>
-                    <ArrowRight className="size-3.5" />
-                  </button>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
+        </div>
+
+        {/* Generic Choose Master CTA */}
+        <div className="mt-8 flex justify-center">
+          <Link
+            to="/team"
+            className="inline-flex items-center gap-2.5 rounded-full bg-primary px-8 py-4 text-xs font-semibold uppercase tracking-wider text-primary-foreground shadow-[0_0_30px_rgba(255,255,255,0.2)] transition hover:scale-105 active:scale-95"
+          >
+            <Users className="size-4" />
+            <span>{L.chooseMaster}</span>
+            <ArrowRight className="size-4" />
+          </Link>
         </div>
       </div>
 
@@ -195,15 +200,16 @@ function ServicesPage() {
             </h2>
             <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
               {lang === "uz"
-                ? "Malakali ustalardan birini tanlang yoki asoschimiz Bobur Vafaev huzurida VIP qabulga yoziling."
-                : "Запишитесь к любому из 10 мастеров или выберите VIP-обслуживание у основателя Бобура Вафаева."}
+                ? "10 nafar malakali ustalarimizdan birini tanlang yoki asoschimiz Bobur Vafaev huzurida VIP qabulga yoziling."
+                : "Запишитесь к любому из наших 10 мастеров или выберите VIP-обслуживание у основателя Бобура Вафаева."}
             </p>
             <div className="pt-4 flex flex-wrap justify-center gap-4">
               <Link
                 to="/team"
-                className="rounded-full bg-primary px-8 py-3.5 text-xs font-semibold uppercase tracking-wider text-primary-foreground transition hover:opacity-90 shadow-lg"
+                className="rounded-full bg-primary px-8 py-3.5 text-xs font-semibold uppercase tracking-wider text-primary-foreground transition hover:opacity-90 shadow-lg inline-flex items-center gap-2"
               >
-                {L.chooseMaster}
+                <span>{L.chooseMaster}</span>
+                <ArrowRight className="size-3.5" />
               </Link>
               <Link
                 to="/contacts"
@@ -220,7 +226,15 @@ function ServicesPage() {
       <Footer lang={lang} />
 
       {/* Master Booking Modal */}
-      <MasterModal master={master} onClose={() => setMaster(null)} lang={lang} />
+      <MasterModal
+        master={master}
+        isOpen={isBookingOpen}
+        onClose={() => {
+          setMaster(null);
+          setIsBookingOpen(false);
+        }}
+        lang={lang}
+      />
     </main>
   );
 }

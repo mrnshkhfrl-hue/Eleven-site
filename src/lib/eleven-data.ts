@@ -11,29 +11,29 @@ export type Service = {
   photo: string;
 };
 
-export type CategoryId = "top" | "barber" | "bobur";
+export type CategoryId = "vip" | "top" | "barber";
 
 export const CATEGORIES: { id: CategoryId; label: string; labelUz: string; note: string; noteUz: string }[] = [
   {
+    id: "vip",
+    label: "VIP (Bobur Vafaev)",
+    labelUz: "VIP (Bobur Vafaev)",
+    note: "Персональная работа основателя ELEVEN — авторский стиль и безупречная форма",
+    noteUz: "ELEVEN asoschisining shaxsiy mualliflik ishi va qabuli",
+  },
+  {
     id: "top",
-    label: "TOP BARBER",
-    labelUz: "TOP BARBER",
-    note: "Стрижки и борода от топ-мастеров",
-    noteUz: "Top-barberlar tomonidan soch va soqol",
+    label: "TOP BARBER (Shaxriyor Mansurov)",
+    labelUz: "TOP BARBER (Shaxriyor Mansurov)",
+    note: "Фирменные стрижки, борода и детский стиль от топ-мастера",
+    noteUz: "Top-barber tomonidan mualliflik soch va soqol parvarishi",
   },
   {
     id: "barber",
-    label: "Парикмахерские услуги",
-    labelUz: "Sartaroshlik xizmatlari",
-    note: "Стрижки, уход, воск, маски и тонирование",
-    noteUz: "Soch olish, parvarish, mum, niqob va toniklash",
-  },
-  {
-    id: "bobur",
-    label: "Bobur Vafaev",
-    labelUz: "Bobur Vafaev",
-    note: "VIP — авторский образ от основателя",
-    noteUz: "VIP — asoschining mualliflik yondashuvi",
+    label: "BARBER (Парикмахерские услуги)",
+    labelUz: "BARBER (Sartaroshlik xizmatlari)",
+    note: "Стрижки, уход за кожей, воск, тонирование и маски",
+    noteUz: "Soch olish, yuz parvarishi, mum, niqob va toniklash",
   },
 ];
 
@@ -41,9 +41,33 @@ const P = (id: string, w = 800) =>
   `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=80`;
 
 export const SERVICES: Service[] = [
-  /* ─── 1. Услуги TOP BARBER ─── */
+  /* ─── 1. Category 1: VIP (Bobur Vafaev) ─── */
   {
-    id: "top-1",
+    id: "bobur-haircut",
+    name: "Стрижка у Бобура",
+    nameUz: "Bobur Vafaev bilan soch olish",
+    desc: "Персональная работа основателя ELEVEN — авторский стиль и безупречная форма.",
+    descUz: "ELEVEN asoschisidan shaxsiy soch turmagi — mualliflik uslubi va mukammal shakl.",
+    price: 500000,
+    minutes: 120,
+    category: "vip",
+    photo: P("photo-1622286342621-4bd786c2447c"),
+  },
+  {
+    id: "bobur-groom",
+    name: "Образ жениха у Бобура 100$",
+    nameUz: "Kuyov ko'rinishi (Bobur Vafaev) 100$",
+    desc: "Эксклюзивный полный VIP-образ жениха: стрижка, борода, уход и укладка.",
+    descUz: "Kuyov uchun to'liq VIP obraz (100$): soch, soqol, parvarish va styling.",
+    price: 1300000,
+    minutes: 120,
+    category: "vip",
+    photo: P("photo-1492562080023-ab3db95bfbce"),
+  },
+
+  /* ─── 2. Category 2: TOP BARBER (Shaxriyor Mansurov) ─── */
+  {
+    id: "top-haircut",
     name: "Стрижка",
     nameUz: "Soch olish",
     desc: "Фирменная мужская стрижка от топ-мастера с подбором формы и укладкой.",
@@ -54,7 +78,7 @@ export const SERVICES: Service[] = [
     photo: P("photo-1503443207922-dff7d543fd0e"),
   },
   {
-    id: "top-2",
+    id: "top-haircut-beard",
     name: "Стрижка + Борода",
     nameUz: "Soch + Soqol",
     desc: "Полный образ от топ-барбера: моделирование бороды, четкие линии и уход.",
@@ -65,40 +89,40 @@ export const SERVICES: Service[] = [
     photo: P("photo-1621605815971-fbc98d665033"),
   },
   {
-    id: "top-3",
-    name: "Детская стрижка (до 11 лет включительно)",
+    id: "top-kids",
+    name: "Детская стрижка до 11 лет",
     nameUz: "Bolalar soch olish (11 yoshgacha)",
-    desc: "Бережная и стильная стрижка для детей и подростков в кресле топ-мастера.",
-    descUz: "Bolalar va o'smirlar uchun xotirjam va zamonaviy soch turmagi.",
+    desc: "Бережная и стильная стрижка для детей в кресле топ-мастера.",
+    descUz: "Top-usta kursisida bolalar uchun nozik va zamonaviy soch turmagi.",
     price: 140000,
     minutes: 45,
     category: "top",
     photo: P("photo-1596728325488-58c87691e9af"),
   },
 
-  /* ─── 2. Парикмахерские услуги ─── */
+  /* ─── 3. Category 3: BARBER (Парикмахерские услуги) ─── */
+  {
+    id: "barber-haircut",
+    name: "Мужская стрижка",
+    nameUz: "Erkaklar soch turmagi",
+    desc: "Классическая или трендовая мужская стрижка с мытьем головы и стайлингом.",
+    descUz: "Bosh yuvish va styling bilan birga klassik yoki zamonaviy erkaklar soch turmagi.",
+    price: 120000,
+    minutes: 45,
+    category: "barber",
+    photo: P("photo-1503951914875-452162b0f3f1"),
+  },
   {
     id: "barber-wedding",
     name: "Свадебные причёски",
     nameUz: "To'y turmaklari",
-    desc: "Торжественная укладка и премиальная прическа для жениха и особых событий.",
+    desc: "Праздничная укладка и создание гармоничного свадебного образа.",
     descUz: "Kuyov va maxsus tantanalar uchun tantanali soch turmagi va styling.",
     price: 800000,
     isFromPrice: true,
     minutes: 120,
     category: "barber",
     photo: P("photo-1503951914875-452162b0f3f1"),
-  },
-  {
-    id: "barber-styling",
-    name: "Укладка",
-    nameUz: "Soch turmaklash (styling)",
-    desc: "Мытье головы, моделирование формы и фиксация премиальным стайлингом.",
-    descUz: "Bosh yuvish, shakl berish va premium styling bilan mahkamlash.",
-    price: 70000,
-    minutes: 30,
-    category: "barber",
-    photo: P("photo-1517832606299-7ae9b720a186"),
   },
   {
     id: "barber-clipper",
@@ -112,10 +136,21 @@ export const SERVICES: Service[] = [
     photo: P("photo-1585747860715-2ba37e788b70"),
   },
   {
+    id: "barber-styling",
+    name: "Укладка",
+    nameUz: "Soch turmaklash (styling)",
+    desc: "Профессиональная укладка волос премиальными стайлинговыми средствами.",
+    descUz: "Bosh yuvish, shakl berish va premium styling bilan mahkamlash.",
+    price: 70000,
+    minutes: 30,
+    category: "barber",
+    photo: P("photo-1517832606299-7ae9b720a186"),
+  },
+  {
     id: "barber-facial",
     name: "Чистка лица",
     nameUz: "Yuz tozalash",
-    desc: "Глубокое очищение пор, отшелушивание и освежающий тонизирующий уход.",
+    desc: "Глубокое очищение кожи лица и распаривание.",
     descUz: "Yuz teshiklarini chuqur tozalash va terini yangilovchi parvarish.",
     price: 80000,
     minutes: 30,
@@ -124,9 +159,9 @@ export const SERVICES: Service[] = [
   },
   {
     id: "barber-beard-razor",
-    name: "Коррекция бороды (с лезвием)",
+    name: "Коррекция бороды лезвием",
     nameUz: "Soqol korreksiyasi (ustara bilan)",
-    desc: "Оформление контуров опасной бритвой, распаривание и масло для бороды.",
+    desc: "Четкие контуры бороды шаветкой с распариванием и бальзамом.",
     descUz: "Ustara bilan soqol chiziqlarini to'g'rilash, bug'lash va soqol moyi.",
     price: 70000,
     minutes: 30,
@@ -137,7 +172,7 @@ export const SERVICES: Service[] = [
     id: "barber-wax",
     name: "Горячий воск",
     nameUz: "Issiq mum (vosk)",
-    desc: "Деликатное удаление нежелательных волос в зоне носа, ушей и скул.",
+    desc: "Депиляция нежелательных волос (нос, уши, брови) горячим воском.",
     descUz: "Burun, quloq va yanoq sohasidagi keraksiz tuklarni nozik tozalash.",
     price: 60000,
     minutes: 15,
@@ -148,7 +183,7 @@ export const SERVICES: Service[] = [
     id: "barber-toning-head",
     name: "Тонирование головы",
     nameUz: "Bosh sochlarini toniklash",
-    desc: "Естественный камуфляж седины и придание волосам глубокого естественного цвета.",
+    desc: "Камуфляж седины и придание волосам естественного ровного тона.",
     descUz: "Oq sochlarni tabiiy kamuflyaj qilish va yorqin rang berish.",
     price: 60000,
     minutes: 30,
@@ -159,7 +194,7 @@ export const SERVICES: Service[] = [
     id: "barber-toning-beard",
     name: "Тонирование бороды",
     nameUz: "Soqol toniklash",
-    desc: "Выравнивание тона бороды, скрытие седины и придание густоты цвету.",
+    desc: "Камуфляж седины на бороде для ухоженного натурального вида.",
     descUz: "Soqol rangini bir xil qilish va oq sochlarni berkitish.",
     price: 50000,
     minutes: 15,
@@ -170,36 +205,12 @@ export const SERVICES: Service[] = [
     id: "barber-black-mask",
     name: "Черная маска",
     nameUz: "Qora maska",
-    desc: "Детокс-маска для лица от черных точек с успокаивающим лосьоном.",
+    desc: "Очищающая маска-пленка против черных точек и загрязнений кожи.",
     descUz: "Qora nuqtalarga qarshi detoks-maska va tinchlantiruvchi losyon.",
     price: 60000,
     minutes: 30,
     category: "barber",
     photo: P("photo-1560750588-73207b1ef5b8"),
-  },
-
-  /* ─── 3. Услуги Bobur Vafaev ─── */
-  {
-    id: "bobur-haircut",
-    name: "Стрижка у Бобура",
-    nameUz: "Bobur Vafaev bilan soch olish",
-    desc: "Персональная работа основателя ELEVEN — авторский стиль и безупречная форма.",
-    descUz: "ELEVEN asoschisidan shaxsiy soch turmagi — eksklyuziv individual uslub.",
-    price: 500000,
-    minutes: 120,
-    category: "bobur",
-    photo: P("photo-1622286342621-4bd786c2447c"),
-  },
-  {
-    id: "bobur-groom",
-    name: "Образ жениха у Бобура 100$",
-    nameUz: "Kuyov ko'rinishi (Bobur Vafaev) 100$",
-    desc: "Эксклюзивный полный VIP-образ жениха (100$): стрижка, борода, уход за кожей и укладка.",
-    descUz: "Kuyov uchun to'liq VIP obraz (100$): soch, soqol, teri parvarishi va tantanali styling.",
-    price: 1300000,
-    minutes: 120,
-    category: "bobur",
-    photo: P("photo-1492562080023-ab3db95bfbce"),
   },
 ];
 
@@ -208,7 +219,7 @@ export const BOBUR = "Bobur Vafaev";
 export type Barber = {
   id: string;
   name: string;
-  role: string;
+  role: "VIP Barber" | "TOP Barber" | "Barber";
   photo: string;
   years: number;
   bio: string;
@@ -233,7 +244,7 @@ const RAW: Omit<Barber, "portfolio">[] = [
   {
     id: "308631",
     name: BOBUR,
-    role: "Founder",
+    role: "VIP Barber",
     photo: P("photo-1503443207922-dff7d543fd0e"),
     years: 12,
     bio: "Основатель ELEVEN. Автор стиля студии, работает только по личной записи.",
@@ -242,7 +253,7 @@ const RAW: Omit<Barber, "portfolio">[] = [
   {
     id: "503580",
     name: "Shaxriyor Mansurov",
-    role: "Top Barber",
+    role: "TOP Barber",
     photo: P("photo-1519085360753-af0119f7cbe7"),
     years: 8,
     bio: "Специалист по классике и точным фейдам, работа с густыми волосами.",
@@ -251,7 +262,7 @@ const RAW: Omit<Barber, "portfolio">[] = [
   {
     id: "330264",
     name: "Diyor Valiyev",
-    role: "Top Barber",
+    role: "Barber",
     photo: P("photo-1500648767791-00dcc994a43e"),
     years: 7,
     bio: "Современные текстурные стрижки и архитектура бороды.",
@@ -344,7 +355,7 @@ export const formatPrice = (v: number, isFrom?: boolean, lang: "ru" | "uz" = "ru
 export const formatTime = (min: number, lang: "ru" | "uz" = "ru") => {
   const h = Math.floor(min / 60);
   const m = min % 60;
-  const hu = lang === "uz" ? "соат" : "ч";
-  const mu = lang === "uz" ? "дак" : "мин";
+  const hu = lang === "uz" ? "soat" : "ч";
+  const mu = lang === "uz" ? "daq" : "мин";
   return [h ? `${h} ${hu}` : null, m ? `${m} ${mu}` : null].filter(Boolean).join(" ");
 };

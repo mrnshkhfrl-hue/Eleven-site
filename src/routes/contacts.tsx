@@ -40,12 +40,13 @@ export const Route = createFileRoute("/contacts")({
 function ContactsPage() {
   const [lang, setLang] = useState<Lang>("ru");
   const [master, setMaster] = useState<Barber | null>(null);
+  const [isBookingOpen, setIsBookingOpen] = useState(false);
   const L = t(lang);
 
   return (
     <main className="relative min-h-screen overflow-x-hidden bg-[#050505] text-foreground pt-28 pb-20">
       {/* Sticky Navbar */}
-      <Navbar lang={lang} setLang={setLang} onBookClick={() => setMaster(BARBERS[0])} />
+      <Navbar lang={lang} setLang={setLang} onBookClick={() => setIsBookingOpen(true)} />
 
       {/* Hero Header */}
       <div className="mx-auto w-[92%] max-w-6xl pt-6 pb-12">
@@ -210,7 +211,15 @@ function ContactsPage() {
       <Footer lang={lang} />
 
       {/* Master Modal */}
-      <MasterModal master={master} onClose={() => setMaster(null)} lang={lang} />
+      <MasterModal
+        master={master}
+        isOpen={isBookingOpen}
+        onClose={() => {
+          setMaster(null);
+          setIsBookingOpen(false);
+        }}
+        lang={lang}
+      />
     </main>
   );
 }
