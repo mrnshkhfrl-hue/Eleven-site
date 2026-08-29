@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import { useState } from "react";
-import { Image as ImageIcon } from "lucide-react";
+import { Camera } from "lucide-react";
 
 import { LOOKBOOK, type Barber } from "@/lib/eleven-data";
 import { Navbar } from "@/components/eleven/Navbar";
@@ -14,13 +14,13 @@ export const Route = createFileRoute("/lookbook")({
   component: LookbookPage,
   head: () => ({
     meta: [
-      { title: "Lookbook — ELEVEN Барбершоп Самарканд" },
+      { title: "Наша атмосфера — ELEVEN Барбершоп Самарканд" },
       {
         name: "description",
         content:
           "Фотогалерея лучших мужских стрижек, бороды и стайлинга от мастеров ELEVEN в Самарканде.",
       },
-      { property: "og:title", content: "Lookbook — ELEVEN Барбершоп" },
+      { property: "og:title", content: "Наша атмосфера — ELEVEN Барбершоп" },
       {
         property: "og:description",
         content: "Галерея работ премиум барбершопа ELEVEN. Вдохновитесь стилем.",
@@ -50,8 +50,8 @@ export function LookbookPage() {
           className="text-center md:text-left"
         >
           <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[10px] font-medium tracking-[0.3em] uppercase glass mb-4">
-            <ImageIcon className="size-3 text-muted-foreground" />
-            <span>PORTFOLIO & GALLERY</span>
+            <Camera className="size-3 text-muted-foreground" />
+            <span>OUR VIBE</span>
           </div>
           <h1 className="font-display text-4xl tracking-tight sm:text-6xl md:text-7xl">
             {L.lookbookTitle}

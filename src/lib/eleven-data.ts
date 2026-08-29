@@ -14,7 +14,13 @@ export type Service = {
 
 export type CategoryId = "vip" | "top" | "barber";
 
-export const CATEGORIES: { id: CategoryId; label: string; labelUz: string; note: string; noteUz: string }[] = [
+export const CATEGORIES: {
+  id: CategoryId;
+  label: string;
+  labelUz: string;
+  note: string;
+  noteUz: string;
+}[] = [
   {
     id: "vip",
     label: "VIP (Bobur Vafaev)",
@@ -243,7 +249,7 @@ const WORK = [
 export const SONLINE_PLACE_ID = "624881582";
 
 export const widgetUrl = (masterId?: string) =>
-  `https://widget.sonline.su/ru/services/?placeid=${SONLINE_PLACE_ID}${
+  `https://widget.sonline.su/ru/masters/?placeid=${SONLINE_PLACE_ID}${
     masterId ? `&master=${masterId}` : ""
   }`;
 

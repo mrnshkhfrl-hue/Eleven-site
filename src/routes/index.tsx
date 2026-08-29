@@ -16,6 +16,7 @@ import {
   Scissors,
   Sparkles,
   Users,
+  Camera,
 } from "lucide-react";
 
 import {
@@ -68,6 +69,24 @@ export const Route = createFileRoute("/")({
 const HERO_IMG =
   "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=1920&q=80";
 
+const DIVIDER_IMG =
+  "https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&w=1920&q=80";
+
+/* ─── Sort services: Стрижка 120k → Стрижка TOP 150k → Стрижка+Борода 200k → rest ─── */
+const MAIN_ORDER = ["barber-haircut", "top-haircut", "top-haircut-beard"];
+
+function sortedMainServices(services: typeof SERVICES) {
+  const mainServices = services.filter((s) => s.isMain);
+  return mainServices.sort((a, b) => {
+    const aIdx = MAIN_ORDER.indexOf(a.id);
+    const bIdx = MAIN_ORDER.indexOf(b.id);
+    if (aIdx !== -1 && bIdx !== -1) return aIdx - bIdx;
+    if (aIdx !== -1) return -1;
+    if (bIdx !== -1) return 1;
+    return 0;
+  });
+}
+
 function Index() {
   const [lang, setLang] = useState<Lang>("ru");
   const [activeCategory, setActiveCategory] = useState<CategoryId | "all">("all");
@@ -78,6 +97,7 @@ function Index() {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const L = t(lang);
 
+  /* Team carousel refs */
   const carouselRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -87,6 +107,9 @@ function Index() {
     scrollLeft: 0,
     hasMoved: false,
   });
+
+  /* Services carousel refs (mobile) */
+  const servicesCarouselRef = useRef<HTMLDivElement>(null);
 
   const checkScrollButtons = useCallback(() => {
     if (!carouselRef.current) return;
@@ -143,8 +166,8 @@ function Index() {
     setIsDragging(false);
   };
 
-  const scrollToTeam = () => {
-    const el = document.getElementById("team");
+  const scrollToServices = () => {
+    const el = document.getElementById("services");
     if (el) {
       el.scrollIntoView({ behavior: "smooth" });
     }
@@ -152,7 +175,8 @@ function Index() {
 
   const filteredServices = useMemo(() => {
     if (activeCategory === "all") {
-      return showAllServices ? SERVICES : SERVICES.filter((s) => s.isMain);
+      if (showAllServices) return SERVICES;
+      return sortedMainServices(SERVICES);
     }
     return SERVICES.filter((s) => s.category === activeCategory);
   }, [activeCategory, showAllServices]);
@@ -163,7 +187,10 @@ function Index() {
       <Navbar lang={lang} setLang={setLang} onBookClick={() => setIsBookingOpen(true)} />
 
       {/* ─────────────────────── HERO ─────────────────────── */}
-      <section id="home" className="relative flex min-h-screen items-center justify-center overflow-hidden">
+      <section
+        id="home"
+        className="relative flex pt-28 pb-16 sm:min-h-screen sm:pt-0 sm:pb-0 items-center justify-center overflow-hidden"
+      >
         {/* Background */}
         <img
           src={HERO_IMG}
@@ -210,7 +237,7 @@ function Index() {
             className="mt-10 flex flex-col items-center gap-5 sm:flex-row"
           >
             <button
-              onClick={scrollToTeam}
+              onClick={() => setIsBookingOpen(true)}
               className="group inline-flex items-center gap-3 rounded-full px-8 py-4 text-sm font-semibold tracking-wide transition hover:bg-white/10 glass-strong shadow-[0_0_30px_rgba(255,255,255,0.15)] cursor-pointer"
             >
               {L.heroCta}
@@ -228,205 +255,10 @@ function Index() {
         </div>
       </section>
 
-      {/* ─────────────────────── SERVICES (Наши услуги — INFO PRICE LIST) ─────────────────────── */}
-      <section
-        id="services"
-        className="mx-auto w-[92%] max-w-6xl py-28"
-        style={{ contentVisibility: "auto", containIntrinsicSize: "auto 800px" }}
-      >
-        <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[10px] font-medium tracking-[0.3em] uppercase glass mb-3">
-              <Scissors className="size-3 text-muted-foreground" />
-              <span>PRICE LIST</span>
-            </div>
-            <h2 className="font-display text-4xl tracking-wide sm:text-6xl">{L.servicesTitle}</h2>
-            <p className="mt-2 max-w-xl text-sm text-muted-foreground">{L.servicesSubtitle}</p>
-          </motion.div>
-
-          <Link
-            to="/services"
-            className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-wider liquid-glass-btn hover:scale-105 transition"
-          >
-            <span>{L.viewAll} ({SERVICES.length})</span>
-            <ArrowRight className="size-3.5" />
-          </Link>
-        </div>
-
-        {/* 3 Strict Category Switcher Tabs */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="mb-8 flex flex-wrap items-center gap-2 sm:gap-3"
-        >
-          <button
-            onClick={() => setActiveCategory("all")}
-            className={`rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-wider transition-all duration-300 ${
-              activeCategory === "all"
-                ? "bg-primary text-primary-foreground shadow-[0_0_20px_rgba(255,255,255,0.2)] scale-105"
-                : "glass text-muted-foreground hover:text-foreground hover:bg-white/[0.08]"
-            }`}
-          >
-            {L.allCategories} ({SERVICES.length})
-          </button>
-          {CATEGORIES.map((cat) => {
-            const count = SERVICES.filter((s) => s.category === cat.id).length;
-            const label = lang === "uz" ? cat.labelUz : cat.label;
-            const isCatActive = activeCategory === cat.id;
-            return (
-              <button
-                key={cat.id}
-                onClick={() => setActiveCategory(cat.id)}
-                className={`rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-wider transition-all duration-300 ${
-                  isCatActive
-                    ? "bg-primary text-primary-foreground shadow-[0_0_20px_rgba(255,255,255,0.2)] scale-105"
-                    : "glass text-muted-foreground hover:text-foreground hover:bg-white/[0.08]"
-                }`}
-              >
-                {label} ({count})
-              </button>
-            );
-          })}
-        </motion.div>
-
-        {/* Services Info Grid */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredServices.map((s, i) => {
-            const roleBadgeStyle =
-              s.category === "vip"
-                ? "border-amber-400/60 bg-black/85 text-amber-300 shadow-[0_0_15px_rgba(251,191,36,0.3)]"
-                : s.category === "top"
-                  ? "border-sky-400/60 bg-black/85 text-sky-300 shadow-[0_0_15px_rgba(56,189,248,0.3)]"
-                  : "border-white/30 bg-black/85 text-white shadow-[0_0_10px_rgba(0,0,0,0.6)]";
-
-            const roleLabel =
-              s.category === "vip" ? "VIP" : s.category === "top" ? "TOP BARBER" : "BARBER";
-
-            return (
-              <motion.div
-                key={s.id}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 0.5, delay: i * 0.04 }}
-                className="group flex flex-col justify-between overflow-hidden rounded-[2rem] glass transition-all duration-300 hover:bg-white/[0.08] hover:border-white/20 hover:-translate-y-1"
-              >
-                {/* Service photo */}
-                <div
-                  onClick={() => {
-                    setLightboxPhotos(filteredServices.map((srv) => srv.photo));
-                    setLightboxIndex(i);
-                  }}
-                  className="relative overflow-hidden aspect-[16/10] cursor-pointer"
-                >
-                  <img
-                    src={s.photo}
-                    alt={lang === "uz" ? s.nameUz : s.name}
-                    loading="lazy"
-                    decoding="async"
-                    className="size-full object-cover grayscale transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
-                  />
-                  <div className="absolute top-3 right-3">
-                    <span
-                      className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[9px] font-semibold uppercase tracking-wider backdrop-blur-md border ${roleBadgeStyle}`}
-                    >
-                      {s.category === "vip" && <Sparkles className="size-2.5" />}
-                      {roleLabel}
-                    </span>
-                  </div>
-                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-                </div>
-
-                <div className="p-6 flex flex-col flex-grow justify-between gap-4">
-                  <div className="space-y-2">
-                    {/* Name */}
-                    <h3 className="text-base font-semibold tracking-tight">
-                      {lang === "uz" ? s.nameUz : s.name}
-                    </h3>
-                    {/* Description */}
-                    <p className="text-xs leading-relaxed text-muted-foreground">
-                      {lang === "uz" ? s.descUz : s.desc}
-                    </p>
-                  </div>
-
-                  {/* Duration & Price info */}
-                  <div className="pt-3 border-t border-white/5 flex items-center justify-between">
-                    <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
-                      <Clock className="size-3.5" /> {formatTime(s.minutes, lang)}
-                    </span>
-                    <span className="text-base font-bold tabular-nums text-foreground">
-                      {formatPrice(s.price, s.isFromPrice, lang)}
-                    </span>
-                  </div>
-                </div>
-              </motion.div>
-            );
-          })}
-        </div>
-
-        {/* Actions: Show All / Collapse + Choose Master */}
-        <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 text-center">
-          {activeCategory === "all" && (
-            <button
-              onClick={() => setShowAllServices((prev) => !prev)}
-              className="inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-xs font-semibold uppercase tracking-wider liquid-glass-btn hover:scale-105 transition cursor-pointer"
-            >
-              <span>
-                {showAllServices
-                  ? L.collapseServices
-                  : `${L.showAllServices} (${SERVICES.length})`}
-              </span>
-              {showAllServices ? (
-                <ChevronUp className="size-4" />
-              ) : (
-                <ChevronDown className="size-4" />
-              )}
-            </button>
-          )}
-
-          <button
-            onClick={scrollToTeam}
-            className="group inline-flex items-center gap-3 rounded-full bg-primary px-8 py-3.5 text-xs font-semibold uppercase tracking-wider text-primary-foreground shadow-[0_0_30px_rgba(255,255,255,0.2)] transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
-          >
-            <span>{L.chooseMaster}</span>
-            <ArrowRight className="size-4 rotate-90 transition-transform group-hover:translate-y-1" />
-          </button>
-        </div>
-
-        {/* Vibe info cards */}
-        <div className="mt-20 grid gap-4 sm:grid-cols-3">
-          {[
-            { icon: Droplets, t: L.cardCareT, d: L.cardCareD },
-            { icon: Coffee, t: L.cardCoffeeT, d: L.cardCoffeeD },
-            { icon: Scissors, t: L.cardTeamT, d: L.cardTeamD },
-          ].map((c) => (
-            <motion.div
-              key={c.t}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="rounded-3xl p-6 glass"
-            >
-              <c.icon className="size-5" />
-              <h3 className="mt-4 text-sm font-semibold tracking-wide">{c.t}</h3>
-              <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{c.d}</p>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* ─────────────────────── TEAM (Horizontal Carousel with Liquid Glass) ─────────────────────── */}
+      {/* ─────────────────────── TEAM (Horizontal Carousel — NOW ABOVE SERVICES) ─────────────────────── */}
       <section
         id="team"
-        className="pb-28 scroll-mt-24"
+        className="py-12 sm:py-28 scroll-mt-24"
         style={{ contentVisibility: "auto", containIntrinsicSize: "auto 500px" }}
       >
         <div className="mx-auto mb-8 flex w-[92%] max-w-6xl flex-wrap items-end justify-between gap-4">
@@ -536,7 +368,7 @@ function Index() {
                   <div className="absolute top-3 left-3">
                     <span
                       className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider backdrop-blur-md border ${getRoleBadge(
-                        b.role
+                        b.role,
                       )}`}
                     >
                       {b.role === "VIP Barber" && <Sparkles className="size-2.5" />}
@@ -581,7 +413,249 @@ function Index() {
         </div>
       </section>
 
-      {/* ─────────────────────── LOOKBOOK ─────────────────────── */}
+      {/* ─────────────────────── PHOTO DIVIDER (Fullscreen background photo) ─────────────────────── */}
+      <section className="relative h-[70vh] sm:h-[80vh] flex items-center justify-center overflow-hidden">
+        <img
+          src={DIVIDER_IMG}
+          alt="Атмосфера барбершопа ELEVEN"
+          loading="lazy"
+          decoding="async"
+          className="absolute inset-0 size-full object-cover scale-105"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#050505] via-black/60 to-[#050505]" />
+
+        <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-3xl">
+          <motion.h2
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="font-display text-4xl sm:text-6xl md:text-7xl tracking-tight"
+          >
+            {L.dividerHeading}
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.15 }}
+            className="mt-4 text-sm sm:text-base text-muted-foreground tracking-wide"
+          >
+            {L.dividerSub}
+          </motion.p>
+
+          {/* Vibe info cards */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4 w-full"
+          >
+            {[
+              { icon: Droplets, t: L.cardCareT, d: L.cardCareD },
+              { icon: Coffee, t: L.cardCoffeeT, d: L.cardCoffeeD },
+              { icon: Scissors, t: L.cardTeamT, d: L.cardTeamD },
+            ].map((c) => (
+              <div key={c.t} className="rounded-2xl p-5 glass text-center">
+                <c.icon className="size-5 mx-auto" />
+                <h3 className="mt-3 text-sm font-semibold tracking-wide">{c.t}</h3>
+                <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{c.d}</p>
+              </div>
+            ))}
+          </motion.div>
+
+          <motion.button
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.45 }}
+            onClick={scrollToServices}
+            className="mt-8 group inline-flex items-center gap-3 rounded-full px-8 py-3.5 text-xs font-semibold uppercase tracking-wider liquid-glass-btn hover:scale-105 transition cursor-pointer shadow-[0_0_30px_rgba(255,255,255,0.15)]"
+          >
+            <span>{L.servicesTitle}</span>
+            <ArrowRight className="size-4 rotate-90 transition-transform group-hover:translate-y-1" />
+          </motion.button>
+        </div>
+      </section>
+
+      {/* ─────────────────────── SERVICES (Наши услуги — horizontal scroll on mobile) ─────────────────────── */}
+      <section
+        id="services"
+        className="mx-auto w-[92%] max-w-6xl py-28 scroll-mt-24"
+        style={{ contentVisibility: "auto", containIntrinsicSize: "auto 800px" }}
+      >
+        <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[10px] font-medium tracking-[0.3em] uppercase glass mb-3">
+              <Scissors className="size-3 text-muted-foreground" />
+              <span>PRICE LIST</span>
+            </div>
+            <h2 className="font-display text-4xl tracking-wide sm:text-6xl">{L.servicesTitle}</h2>
+            <p className="mt-2 max-w-xl text-sm text-muted-foreground">{L.servicesSubtitle}</p>
+          </motion.div>
+
+          <Link
+            to="/services"
+            className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-wider liquid-glass-btn hover:scale-105 transition"
+          >
+            <span>
+              {L.viewAll} ({SERVICES.length})
+            </span>
+            <ArrowRight className="size-3.5" />
+          </Link>
+        </div>
+
+        {/* Category Switcher Tabs */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mb-8 flex flex-wrap items-center gap-2 sm:gap-3"
+        >
+          <button
+            onClick={() => setActiveCategory("all")}
+            className={`rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-wider transition-all duration-300 ${
+              activeCategory === "all"
+                ? "bg-primary text-primary-foreground shadow-[0_0_20px_rgba(255,255,255,0.2)] scale-105"
+                : "glass text-muted-foreground hover:text-foreground hover:bg-white/[0.08]"
+            }`}
+          >
+            {L.allCategories} ({SERVICES.length})
+          </button>
+          {CATEGORIES.map((cat) => {
+            const count = SERVICES.filter((s) => s.category === cat.id).length;
+            const label = lang === "uz" ? cat.labelUz : cat.label;
+            const isCatActive = activeCategory === cat.id;
+            return (
+              <button
+                key={cat.id}
+                onClick={() => setActiveCategory(cat.id)}
+                className={`rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-wider transition-all duration-300 ${
+                  isCatActive
+                    ? "bg-primary text-primary-foreground shadow-[0_0_20px_rgba(255,255,255,0.2)] scale-105"
+                    : "glass text-muted-foreground hover:text-foreground hover:bg-white/[0.08]"
+                }`}
+              >
+                {label} ({count})
+              </button>
+            );
+          })}
+        </motion.div>
+
+        {/* Services — horizontal scroll on mobile, grid on desktop */}
+        <div
+          ref={servicesCarouselRef}
+          className="flex gap-5 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4 sm:grid sm:grid-cols-2 sm:overflow-visible sm:snap-none sm:pb-0 lg:grid-cols-3"
+        >
+          {filteredServices.map((s, i) => {
+            const roleBadgeStyle =
+              s.category === "vip"
+                ? "border-amber-400/60 bg-black/85 text-amber-300 shadow-[0_0_15px_rgba(251,191,36,0.3)]"
+                : s.category === "top"
+                  ? "border-sky-400/60 bg-black/85 text-sky-300 shadow-[0_0_15px_rgba(56,189,248,0.3)]"
+                  : "border-white/30 bg-black/85 text-white shadow-[0_0_10px_rgba(0,0,0,0.6)]";
+
+            const roleLabel =
+              s.category === "vip" ? "VIP" : s.category === "top" ? "TOP BARBER" : "BARBER";
+
+            return (
+              <motion.div
+                key={s.id}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.5, delay: i * 0.04 }}
+                className="w-[80vw] shrink-0 snap-center sm:w-auto sm:shrink group flex flex-col justify-between overflow-hidden rounded-[2rem] glass transition-all duration-300 hover:bg-white/[0.08] hover:border-white/20 hover:-translate-y-1"
+              >
+                {/* Service photo */}
+                <div
+                  onClick={() => {
+                    setLightboxPhotos(filteredServices.map((srv) => srv.photo));
+                    setLightboxIndex(i);
+                  }}
+                  className="relative overflow-hidden aspect-[16/10] cursor-pointer"
+                >
+                  <img
+                    src={s.photo}
+                    alt={lang === "uz" ? s.nameUz : s.name}
+                    loading="lazy"
+                    decoding="async"
+                    className="size-full object-cover grayscale transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
+                  />
+                  <div className="absolute top-3 right-3">
+                    <span
+                      className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[9px] font-semibold uppercase tracking-wider backdrop-blur-md border ${roleBadgeStyle}`}
+                    >
+                      {s.category === "vip" && <Sparkles className="size-2.5" />}
+                      {roleLabel}
+                    </span>
+                  </div>
+                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+                </div>
+
+                <div className="p-6 flex flex-col flex-grow justify-between gap-4">
+                  <div className="space-y-2">
+                    {/* Name */}
+                    <h3 className="text-base font-semibold tracking-tight">
+                      {lang === "uz" ? s.nameUz : s.name}
+                    </h3>
+                    {/* Description */}
+                    <p className="text-xs leading-relaxed text-muted-foreground">
+                      {lang === "uz" ? s.descUz : s.desc}
+                    </p>
+                  </div>
+
+                  {/* Duration & Price info */}
+                  <div className="pt-3 border-t border-white/5 flex items-center justify-between">
+                    <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <Clock className="size-3.5" /> {formatTime(s.minutes, lang)}
+                    </span>
+                    <span className="text-base font-bold tabular-nums text-foreground">
+                      {formatPrice(s.price, s.isFromPrice, lang)}
+                    </span>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+
+        {/* Actions: Show All / Collapse + Choose Master */}
+        <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 text-center">
+          {activeCategory === "all" && (
+            <button
+              onClick={() => setShowAllServices((prev) => !prev)}
+              className="inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-xs font-semibold uppercase tracking-wider liquid-glass-btn hover:scale-105 transition cursor-pointer"
+            >
+              <span>
+                {showAllServices ? L.collapseServices : `${L.showAllServices} (${SERVICES.length})`}
+              </span>
+              {showAllServices ? (
+                <ChevronUp className="size-4" />
+              ) : (
+                <ChevronDown className="size-4" />
+              )}
+            </button>
+          )}
+
+          <button
+            onClick={() => setIsBookingOpen(true)}
+            className="group inline-flex items-center gap-3 rounded-full bg-primary px-8 py-3.5 text-xs font-semibold uppercase tracking-wider text-primary-foreground shadow-[0_0_30px_rgba(255,255,255,0.2)] transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
+          >
+            <span>{L.chooseMaster}</span>
+            <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+          </button>
+        </div>
+      </section>
+
+      {/* ─────────────────────── НАША АТМОСФЕРА (was Lookbook) ─────────────────────── */}
       <section
         id="lookbook"
         className="mx-auto w-[92%] max-w-6xl pb-28"
@@ -592,13 +666,15 @@ function Index() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.6 }}
-          className="mb-8 flex items-end justify-between"
+          className="mb-10 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4"
         >
           <div>
+            <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[10px] font-medium tracking-[0.3em] uppercase glass mb-3">
+              <Camera className="size-3 text-muted-foreground" />
+              <span>OUR VIBE</span>
+            </div>
             <h2 className="font-display text-4xl tracking-wide sm:text-6xl">{L.lookbookTitle}</h2>
-            <p className="mt-2 text-xs tracking-[0.2em] text-muted-foreground uppercase">
-              {L.ourWork}
-            </p>
+            <p className="mt-2 text-sm text-muted-foreground">{L.lookbookSubtitle}</p>
           </div>
           <Link
             to="/lookbook"
@@ -609,31 +685,32 @@ function Index() {
           </Link>
         </motion.div>
 
-        <div className="columns-2 gap-4 [column-fill:_balance] sm:columns-2 lg:columns-3">
+        {/* Masonry gallery — improved layout */}
+        <div className="columns-2 gap-3 sm:gap-4 [column-fill:_balance] lg:columns-3">
           {LOOKBOOK.map((src, i) => (
             <motion.div
               key={src}
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.6, delay: i * 0.05 }}
+              transition={{ duration: 0.6, delay: i * 0.06 }}
               onClick={() => {
                 setLightboxPhotos(LOOKBOOK);
                 setLightboxIndex(i);
               }}
               style={{ breakInside: "avoid" }}
-              className={`break-inside-avoid mb-4 cursor-pointer overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] group relative transition-all duration-300 hover:border-white/25 hover:bg-white/[0.06] ${
+              className={`break-inside-avoid mb-3 sm:mb-4 cursor-pointer overflow-hidden rounded-2xl sm:rounded-3xl border border-white/10 bg-white/[0.03] group relative transition-all duration-300 hover:border-white/25 hover:bg-white/[0.06] hover:-translate-y-1 ${
                 i % 3 === 0 ? "aspect-[3/4]" : i % 3 === 1 ? "aspect-square" : "aspect-[4/5]"
               }`}
             >
               <img
                 src={src}
-                alt={`Работа мастеров ELEVEN ${i + 1}`}
+                alt={`ELEVEN вайб ${i + 1}`}
                 loading="lazy"
                 decoding="async"
                 className="size-full object-cover grayscale transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4 sm:p-5">
                 <span className="text-xs font-semibold uppercase tracking-wider text-white">
                   ELEVEN Style #{i + 1}
                 </span>

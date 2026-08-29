@@ -22,7 +22,7 @@ export function LightboxModal({ photos, currentIndex, onClose, onSelectIndex }: 
         onSelectIndex(photos.length - 1);
       }
     },
-    [currentIndex, onSelectIndex, photos.length]
+    [currentIndex, onSelectIndex, photos.length],
   );
 
   const handleNext = useCallback(
@@ -34,7 +34,7 @@ export function LightboxModal({ photos, currentIndex, onClose, onSelectIndex }: 
         onSelectIndex(0);
       }
     },
-    [currentIndex, onSelectIndex, photos.length]
+    [currentIndex, onSelectIndex, photos.length],
   );
 
   // Keyboard navigation

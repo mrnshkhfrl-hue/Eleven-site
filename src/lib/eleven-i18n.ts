@@ -35,7 +35,7 @@ const dict = {
     home: "Главная",
     services: "Услуги",
     team: "Команда",
-    lookbook: "Lookbook",
+    lookbook: "Атмосфера",
     contacts: "Контакты",
     book: "Записаться",
 
@@ -64,13 +64,18 @@ const dict = {
     allTeam: "Вся команда",
 
     /* lookbook */
-    lookbookTitle: "LOOKBOOK",
-    lookbookSubtitle: "Галерея стрижек, бороды и стайлинга гостей ELEVEN",
-    ourWork: "наши работы",
+    lookbookTitle: "Наша атмосфера",
+    lookbookSubtitle: "Стиль, атмосфера и вайб нашего барбершопа",
+    ourWork: "наш вайб",
+
+    /* photo divider */
+    dividerHeading: "Твоя территория",
+    dividerSub: "Премиум пространство, где стиль встречает комфорт",
 
     /* contacts */
     contactsTitle: "Контакты",
-    contactsSubtitle: "Ждем вас каждый день в Самарканде (ул. Амира Тимура, 224, ориентир: ТРЦ «Атлас»)",
+    contactsSubtitle:
+      "Ждем вас каждый день в Самарканде (ул. Амира Тимура, 224, ориентир: ТРЦ «Атлас»)",
     address: "Адрес",
     workHours: "Часы работы",
     phone: "Телефон",
@@ -108,7 +113,7 @@ const dict = {
     home: "Bosh sahifa",
     services: "Xizmatlar",
     team: "Jamoa",
-    lookbook: "Lookbook",
+    lookbook: "Muhit",
     contacts: "Kontaktlar",
     book: "Yozilish",
 
@@ -137,9 +142,13 @@ const dict = {
     allTeam: "Barcha ustalar",
 
     /* lookbook */
-    lookbookTitle: "LOOKBOOK",
-    lookbookSubtitle: "ELEVEN mehmonlarining soch, soqol va styling fotogalereyasi",
-    ourWork: "bizning ishlarimiz",
+    lookbookTitle: "Bizning muhit",
+    lookbookSubtitle: "Barbershopimizning uslubi, muhiti va vaybi",
+    ourWork: "bizning vayb",
+
+    /* photo divider */
+    dividerHeading: "Sizning hududingiz",
+    dividerSub: "Uslub qulaylik bilan uchrashadigan premium makon",
 
     /* contacts */
     contactsTitle: "Kontaktlar",

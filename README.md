@@ -43,7 +43,7 @@ Phone input MUST have a fixed +998 prefix on the left inside the input container
 The form has a Barber Select dropdown. SMART LOGIC: If any selected service belongs to the "BOBUR VAFAEV" category, the Barber Select MUST automatically lock (disabled) and set its value to "Bobur Vafaev".
 
 Build the complete, polished UI. Ensure all state (multi-select, modals, smart select locking) works perfectly.
-bot token @secret:TELEGRAM_BOT_TOKEN 
+bot token @secret:TELEGRAM_BOT_TOKEN
 мой юзер айди в тг 7949519588 еще что от тг нужно и сделай сайт имбовым
 
 This project was built with [Lovable](https://lovable.dev).

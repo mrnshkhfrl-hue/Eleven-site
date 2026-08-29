@@ -1,13 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Instagram } from "lucide-react";
-import {
-  ADDRESS,
-  ADDRESS_CITY,
-  HOURS,
-  INSTAGRAM,
-  t,
-  type Lang,
-} from "@/lib/eleven-i18n";
+import { ADDRESS, ADDRESS_CITY, HOURS, INSTAGRAM, t, type Lang } from "@/lib/eleven-i18n";
 
 type Props = {
   lang: Lang;

@@ -124,7 +124,11 @@ function ServicesPage() {
                   : "border-white/30 bg-black/85 text-white shadow-[0_0_10px_rgba(0,0,0,0.6)]";
 
             const roleLabel =
-              service.category === "vip" ? "VIP" : service.category === "top" ? "TOP BARBER" : "BARBER";
+              service.category === "vip"
+                ? "VIP"
+                : service.category === "top"
+                  ? "TOP BARBER"
+                  : "BARBER";
 
             return (
               <motion.div

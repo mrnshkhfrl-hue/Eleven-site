@@ -92,9 +92,7 @@ function ContactsPage() {
                   <span className="text-xs text-muted-foreground">{ADDRESS_CITY[lang]}</span>
                 </div>
               </div>
-              <p className="text-base font-semibold leading-relaxed">
-                {ADDRESS[lang]}
-              </p>
+              <p className="text-base font-semibold leading-relaxed">{ADDRESS[lang]}</p>
               <a
                 href="https://yandex.uz/maps/-/CTsLYDkj"
                 target="_blank"

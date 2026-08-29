@@ -86,7 +86,7 @@ export function MasterModal({ master, isOpen = false, onClose, lang }: Props) {
                       <div className="flex items-center gap-2">
                         <span
                           className={`inline-block rounded-full px-2.5 py-0.5 text-[9px] uppercase font-semibold border ${getRoleBadge(
-                            master.role
+                            master.role,
                           )}`}
                         >
                           {master.role}
@@ -128,7 +128,7 @@ export function MasterModal({ master, isOpen = false, onClose, lang }: Props) {
                     <div className="absolute top-3 left-3">
                       <span
                         className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-wider backdrop-blur-md border ${getRoleBadge(
-                          master.role
+                          master.role,
                         )}`}
                       >
                         {master.role === "VIP Barber" && <Sparkles className="size-3" />}
@@ -140,7 +140,9 @@ export function MasterModal({ master, isOpen = false, onClose, lang }: Props) {
                   {/* Name & role */}
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div>
-                      <h3 className="font-display text-3xl sm:text-4xl tracking-wide">{master.name}</h3>
+                      <h3 className="font-display text-3xl sm:text-4xl tracking-wide">
+                        {master.name}
+                      </h3>
                       <p className="mt-1 text-[11px] tracking-[0.25em] text-muted-foreground uppercase">
                         {master.role}
                       </p>
@@ -218,7 +220,9 @@ export function MasterModal({ master, isOpen = false, onClose, lang }: Props) {
                     <p className="text-[10px] tracking-[0.35em] text-muted-foreground uppercase">
                       ELEVEN BARBERSHOP · SAMARKAND
                     </p>
-                    <h3 className="font-display text-2xl sm:text-3xl tracking-wide">{L.bookingTitle}</h3>
+                    <h3 className="font-display text-2xl sm:text-3xl tracking-wide">
+                      {L.bookingTitle}
+                    </h3>
                     <p className="text-xs text-muted-foreground mt-0.5">
                       {L.selectServiceAndMaster}
                     </p>

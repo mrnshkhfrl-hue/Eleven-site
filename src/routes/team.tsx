@@ -75,7 +75,8 @@ function TeamPage() {
           className="mt-10 flex flex-wrap items-center gap-2.5"
         >
           {roles.map((role) => {
-            const count = role === "all" ? BARBERS.length : BARBERS.filter((b) => b.role === role).length;
+            const count =
+              role === "all" ? BARBERS.length : BARBERS.filter((b) => b.role === role).length;
             const isRoleActive = roleFilter === role;
             return (
               <button
@@ -117,7 +118,7 @@ function TeamPage() {
                 <div className="absolute top-3 left-3">
                   <span
                     className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[9px] font-semibold uppercase tracking-wider backdrop-blur-md border ${getRoleBadge(
-                      b.role
+                      b.role,
                     )}`}
                   >
                     {b.role === "VIP Barber" && <Sparkles className="size-2.5" />}

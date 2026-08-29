@@ -79,10 +79,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "ELEVEN — премиум барбершоп в Самарканде" },
-      { name: "description", content: "ELEVEN — премиум барбершоп: стрижки, борода, VIP у Бобура Вафаева. Онлайн-бронь кресла за минуту." },
+      {
+        name: "description",
+        content:
+          "ELEVEN — премиум барбершоп: стрижки, борода, VIP у Бобура Вафаева. Онлайн-бронь кресла за минуту.",
+      },
       { name: "author", content: "ELEVEN Barbershop" },
       { property: "og:title", content: "ELEVEN — премиум барбершоп" },
-      { property: "og:description", content: "Твоя территория. Твой стиль. Забронируй кресло у лучших мастеров Самарканда." },
+      {
+        property: "og:description",
+        content: "Твоя территория. Твой стиль. Забронируй кресло у лучших мастеров Самарканда.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
