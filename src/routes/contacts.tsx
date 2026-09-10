@@ -15,6 +15,7 @@ import {
   PHONE as PHONE_NUM,
   PHONE_HREF,
   t,
+  useLang,
   type Lang,
 } from "@/lib/eleven-i18n";
 
@@ -38,7 +39,7 @@ export const Route = createFileRoute("/contacts")({
 });
 
 function ContactsPage() {
-  const [lang, setLang] = useState<Lang>("ru");
+  const [lang, setLang] = useLang();
   const [master, setMaster] = useState<Barber | null>(null);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const L = t(lang);

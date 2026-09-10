@@ -1,3 +1,5 @@
+import { useState, useEffect, useCallback } from "react";
+
 export type Lang = "ru" | "uz";
 
 export const TIME_SLOTS = (() => {
@@ -188,3 +190,48 @@ const dict = {
 } as const;
 
 export const t = (lang: Lang) => dict[lang];
+
+const LANG_STORAGE_KEY = "eleven_selected_lang";
+
+export function getStoredLang(): Lang {
+  if (typeof window !== "undefined") {
+    try {
+      const stored = localStorage.getItem(LANG_STORAGE_KEY);
+      if (stored === "ru" || stored === "uz") return stored;
+    } catch {
+      // ignore
+    }
+  }
+  return "ru";
+}
+
+export function useLang() {
+  const [lang, setLangState] = useState<Lang>(getStoredLang);
+
+  const setLang = useCallback((newLang: Lang) => {
+    setLangState(newLang);
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem(LANG_STORAGE_KEY, newLang);
+        window.dispatchEvent(new Event("eleven_lang_change"));
+      } catch {
+        // ignore
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    const onLangChange = () => {
+      const current = getStoredLang();
+      setLangState(current);
+    };
+    window.addEventListener("eleven_lang_change", onLangChange);
+    window.addEventListener("storage", onLangChange);
+    return () => {
+      window.removeEventListener("eleven_lang_change", onLangChange);
+      window.removeEventListener("storage", onLangChange);
+    };
+  }, []);
+
+  return [lang, setLang] as const;
+}

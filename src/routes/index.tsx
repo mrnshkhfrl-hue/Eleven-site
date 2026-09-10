@@ -41,6 +41,7 @@ import {
   PHONE as PHONE_NUM,
   PHONE_HREF,
   t,
+  useLang,
   type Lang,
 } from "@/lib/eleven-i18n";
 
@@ -88,7 +89,7 @@ function sortedMainServices(services: typeof SERVICES) {
 }
 
 function Index() {
-  const [lang, setLang] = useState<Lang>("ru");
+  const [lang, setLang] = useLang();
   const [activeCategory, setActiveCategory] = useState<CategoryId | "all">("all");
   const [showAllServices, setShowAllServices] = useState(false);
   const [lightboxPhotos, setLightboxPhotos] = useState<string[]>(LOOKBOOK);

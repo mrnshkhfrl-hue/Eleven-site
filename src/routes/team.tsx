@@ -7,7 +7,7 @@ import { BARBERS, type Barber } from "@/lib/eleven-data";
 import { Navbar } from "@/components/eleven/Navbar";
 import { Footer } from "@/components/eleven/Footer";
 import { MasterModal, getRoleBadge } from "@/components/eleven/MasterModal";
-import { t, type Lang } from "@/lib/eleven-i18n";
+import { t, useLang, type Lang } from "@/lib/eleven-i18n";
 
 export const Route = createFileRoute("/team")({
   component: TeamPage,
@@ -29,7 +29,7 @@ export const Route = createFileRoute("/team")({
 });
 
 function TeamPage() {
-  const [lang, setLang] = useState<Lang>("ru");
+  const [lang, setLang] = useLang();
   const [roleFilter, setRoleFilter] = useState<string>("all");
   const [master, setMaster] = useState<Barber | null>(null);
   const [isBookingOpen, setIsBookingOpen] = useState(false);

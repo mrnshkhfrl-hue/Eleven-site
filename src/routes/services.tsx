@@ -15,7 +15,7 @@ import { Navbar } from "@/components/eleven/Navbar";
 import { Footer } from "@/components/eleven/Footer";
 import { MasterModal } from "@/components/eleven/MasterModal";
 import { LightboxModal } from "@/components/eleven/LightboxModal";
-import { t, type Lang } from "@/lib/eleven-i18n";
+import { t, useLang, type Lang } from "@/lib/eleven-i18n";
 
 export const Route = createFileRoute("/services")({
   component: ServicesPage,
@@ -37,7 +37,7 @@ export const Route = createFileRoute("/services")({
 });
 
 function ServicesPage() {
-  const [lang, setLang] = useState<Lang>("ru");
+  const [lang, setLang] = useLang();
   const [activeCategory, setActiveCategory] = useState<CategoryId | "all">("all");
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [master, setMaster] = useState<Barber | null>(null);
