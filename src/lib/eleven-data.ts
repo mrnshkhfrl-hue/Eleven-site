@@ -241,77 +241,77 @@ export type Barber = {
 };
 
 const BARBER_PORTFOLIOS: Record<string, string[]> = {
-  // 1. Bobur Vafaev (VIP Founder — luxury straight razor shave, hot towel & clipper fade)
+  // 1. Bobur Vafaev (VIP Founder — beard trim shears, temple clipper fade, straight razor shave)
   "308631": [
-    P("photo-1605497788044-5a32c7078486"),
-    P("photo-1503951914875-452162b0f3f1"),
-    P("photo-1599351431202-1e0f0137899a"),
+    "/portfolio/portfolio-01.jpg",
+    "/portfolio/portfolio-02.jpg",
+    "/portfolio/portfolio-03.jpg",
   ],
-  // 2. Shaxriyor Mansurov (TOP Barber — skin fade, shavette razor line & shear work)
+  // 2. Shaxriyor Mansurov (TOP Barber — hairline fade, neck taper, high skin fade)
   "503580": [
-    P("photo-1596728325488-58c87691e9af"),
-    P("photo-1585747860715-2ba37e788b70"),
-    P("photo-1621605815971-fbc98d665033"),
+    "/portfolio/portfolio-04.jpg",
+    "/portfolio/portfolio-05.jpg",
+    "/portfolio/portfolio-06.jpg",
   ],
-  // 3. Diyor Valiyev (Barber — shear texturing, clipper fade & styling)
+  // 3. Diyor Valiyev (Barber — beard scissors, textured crop, classic shear comb)
   "330264": [
-    P("photo-1567894340315-735d7c361db0"),
-    P("photo-1593702275687-f8b402bf1fb5"),
-    P("photo-1517832606299-7ae9b720a186"),
+    "/portfolio/portfolio-07.jpg",
+    "/portfolio/portfolio-08.jpg",
+    "/portfolio/portfolio-09.jpg",
   ],
-  // 4. Fayoz Rakhmonov (Barber — classic scissor cut & razor detailing)
+  // 4. Fayoz Rakhmonov (Barber — back of head shears, side scissor detailing, razor outline)
   "394656": [
-    P("photo-1635273051937-a0ddef9573b6"),
-    P("photo-1593702295094-aea22597af65"),
-    P("photo-1647140655214-e4a2d914971f"),
+    "/portfolio/portfolio-10.jpg",
+    "/portfolio/portfolio-11.jpg",
+    "/portfolio/portfolio-12.jpg",
   ],
-  // 5. Jahongir Azizov (Barber — sharp clipper fade & comb technique)
+  // 5. Jahongir Azizov (Barber — temple fade, ear contour shears, front hairline line-up)
   "573821": [
-    P("photo-1635273051839-003bf06a8751"),
-    P("photo-1599011176306-4a96f1516d4d"),
-    P("photo-1657105052497-f996284ffff8"),
+    "/portfolio/portfolio-13.jpg",
+    "/portfolio/portfolio-14.jpg",
+    "/portfolio/portfolio-15.jpg",
   ],
-  // 6. Samir Axmedov (Barber — razor contour, warm foam & beard care)
+  // 6. Samir Axmedov (Barber — hair styling blow dryer, neck & beard line trimmer, clipper fade)
   "330249": [
-    P("photo-1593702288056-7927b442d0fa"),
-    P("photo-1605497787865-e6d4762b386f"),
-    P("photo-1493256338651-d82f7acb2b38"),
+    "/portfolio/portfolio-16.jpg",
+    "/portfolio/portfolio-17.jpg",
+    "/portfolio/portfolio-18.jpg",
   ],
-  // 7. Shax Adilov (Barber — clean scissor work & hair comb styling)
+  // 7. Shax Adilov (Barber — Wahl clipper neck fade, trimmer neck taper, shears textured cut)
   "1108981": [
-    P("photo-1598524374912-6b0b0bab43dd"),
-    P("photo-1599351431408-433ef72fe40b"),
-    P("photo-1648221122323-572c13a31663"),
+    "/portfolio/portfolio-19.jpg",
+    "/portfolio/portfolio-20.jpg",
+    "/portfolio/portfolio-21.jpg",
   ],
-  // 8. Rajabov Shaxboz (Barber — clipper fade, comb & scissor cut)
+  // 8. Rajabov Shaxboz (Barber — temple fade, neck taper, black clipper fade)
   "shaxboz-rajabov": [
-    P("photo-1672642150228-3fcd5826ec26"),
-    P("photo-1589985494639-69e60c82cab2"),
-    P("photo-1604355240616-5e907f42b431"),
+    "/portfolio/portfolio-22.jpg",
+    "/portfolio/portfolio-23.jpg",
+    "/portfolio/portfolio-24.jpg",
   ],
-  // 9. Izzat Zokirov (Barber — classic scissor cutting & razor work)
+  // 9. Izzat Zokirov (Barber — buzz fade clipper work, straight razor comb cut, razor neck shave)
   "415119": [
-    P("photo-1640301133543-41fe25ad6450"),
-    P("photo-1640301133857-c4bc5789c1bb"),
-    P("photo-1520338661084-680395057c93"),
+    "/portfolio/portfolio-25.jpg",
+    "/portfolio/portfolio-26.jpg",
+    "/portfolio/portfolio-27.jpg",
   ],
-  // 10. Munis Burxanov (Barber — beard trim, clippers & styling)
+  // 10. Munis Burxanov (Barber — shear comb top trimming, clipper over ear, razor shaving foam)
   "324800": [
-    P("photo-1582771498000-8ad44e6c84db"),
-    P("photo-1514336937476-a5b961020a5c"),
-    P("photo-1606333259737-6da197890fa2"),
+    "/portfolio/portfolio-28.jpg",
+    "/portfolio/portfolio-29.jpg",
+    "/portfolio/portfolio-30.jpg",
   ],
-  // 11. Sanjar Xuramov (Barber — fast clean cuts, trimmer & styling)
+  // 11. Sanjar Xuramov (Barber — comb & textured hair, trimmer temple fade, hot towel compress)
   "333234": [
-    P("photo-1585581905588-9e91f63bdd47"),
-    P("photo-1512864084360-7c0c4d0a0845"),
-    P("photo-1599351430140-c70f0250bd70"),
+    "/portfolio/portfolio-31.jpg",
+    "/portfolio/portfolio-32.jpg",
+    "/portfolio/portfolio-33.jpg",
   ],
-  // 12. Parviz Akilov (Barber — modern cuts, razor detailing & comb)
+  // 12. Parviz Akilov (Barber — fresh fade & beard, black mask treatment, hot wax cheek contour)
   "parviz-akilov": [
-    P("photo-1630435664010-20cbd1d7bb6d"),
-    P("photo-1598524374576-40ba05ac9be5"),
-    P("photo-1527512950678-b88a241e9f4b"),
+    "/portfolio/portfolio-34.jpg",
+    "/portfolio/portfolio-35.jpg",
+    "/portfolio/portfolio-36.jpg",
   ],
 };
 
