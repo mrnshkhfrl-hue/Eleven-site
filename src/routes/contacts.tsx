@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import { useState } from "react";
 import { MapPin, Clock, Phone, Instagram, Navigation, Compass } from "lucide-react";
@@ -23,22 +23,24 @@ export const Route = createFileRoute("/contacts")({
   component: ContactsPage,
   head: () => ({
     meta: [
-      { title: "Контакты и адрес — ELEVEN Барбершоп Самарканд" },
+      { title: "Контакты и локация — ELEVEN Барбершоп Самарканд" },
       {
         name: "description",
         content:
-          "Контакты премиум барбершопа ELEVEN в Самарканде. Адрес: ул. Амира Тимура, 224 (ориентир: ТРЦ «Атлас»). Время работы: 10:00 - 21:00. Телефон: +998 (66) 233-11-11.",
+          "Адрес: ул. Амира Тимура, 224 (ТРЦ Атлас), Самарканд. Телефон: +998 (66) 233-11-11. Ежедневно 10:00–21:00. Онлайн-запись и карта проезда.",
       },
       { property: "og:title", content: "Контакты — ELEVEN Барбершоп" },
       {
         property: "og:description",
-        content: "Как нас найти, телефон, Instagram @eleven_uzb и онлайн-запись.",
+        content: "Премиальный барбершоп в Самарканде на Амира Тимура, 224.",
       },
+      { property: "og:image", content: "/hero-bg.jpg" },
     ],
   }),
 });
 
 function ContactsPage() {
+  const navigate = useNavigate();
   const [lang, setLang] = useLang();
   const [master, setMaster] = useState<Barber | null>(null);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
@@ -47,7 +49,7 @@ function ContactsPage() {
   return (
     <main className="relative min-h-screen overflow-x-hidden bg-[#050505] text-foreground pt-28 pb-20">
       {/* Sticky Navbar */}
-      <Navbar lang={lang} setLang={setLang} onBookClick={() => setIsBookingOpen(true)} />
+      <Navbar lang={lang} setLang={setLang} onBookClick={() => navigate({ to: "/team" })} />
 
       {/* Hero Header */}
       <div className="mx-auto w-[92%] max-w-6xl pt-6 pb-12">

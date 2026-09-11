@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import { useState, useMemo } from "react";
 import { ArrowRight, Clock, Scissors, Sparkles, Users } from "lucide-react";
@@ -30,13 +30,15 @@ export const Route = createFileRoute("/services")({
       { property: "og:title", content: "Услуги и цены — ELEVEN Барбершоп" },
       {
         property: "og:description",
-        content: "Стрижки, борода, стайлинг и VIP-услуги в Самарканде. Онлайн-запись.",
+        content: "Премиальные стрижки, борода и мужской уход в Самарканде.",
       },
+      { property: "og:image", content: "/hero-bg.jpg" },
     ],
   }),
 });
 
 function ServicesPage() {
+  const navigate = useNavigate();
   const [lang, setLang] = useLang();
   const [activeCategory, setActiveCategory] = useState<CategoryId | "all">("all");
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
@@ -52,7 +54,7 @@ function ServicesPage() {
   return (
     <main className="relative min-h-screen overflow-x-hidden bg-[#050505] text-foreground pt-28 pb-20">
       {/* Sticky Navbar */}
-      <Navbar lang={lang} setLang={setLang} onBookClick={() => setIsBookingOpen(true)} />
+      <Navbar lang={lang} setLang={setLang} onBookClick={() => navigate({ to: "/team" })} />
 
       {/* Hero Header */}
       <div className="mx-auto w-[92%] max-w-6xl pt-6 pb-12">

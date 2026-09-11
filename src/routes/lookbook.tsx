@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import { useState } from "react";
 import { Camera } from "lucide-react";
@@ -18,18 +18,20 @@ export const Route = createFileRoute("/lookbook")({
       {
         name: "description",
         content:
-          "Фотогалерея лучших мужских стрижек, бороды и стайлинга от мастеров ELEVEN в Самарканде.",
+          "Интерьер и атмосфера премиум барбершопа ELEVEN в Самарканде. 10 кресел, зона отдыха, премиальная косметика.",
       },
       { property: "og:title", content: "Наша атмосфера — ELEVEN Барбершоп" },
       {
         property: "og:description",
-        content: "Галерея работ премиум барбершопа ELEVEN. Вдохновитесь стилем.",
+        content: "Интерьер, рабочие места и детали премиального барбершопа ELEVEN.",
       },
+      { property: "og:image", content: "/hero-bg.jpg" },
     ],
   }),
 });
 
 export function LookbookPage() {
+  const navigate = useNavigate();
   const [lang, setLang] = useLang();
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [master, setMaster] = useState<Barber | null>(null);
@@ -39,7 +41,7 @@ export function LookbookPage() {
   return (
     <main className="relative min-h-screen overflow-x-hidden bg-[#050505] text-foreground pt-28 pb-20">
       {/* Sticky Navbar */}
-      <Navbar lang={lang} setLang={setLang} onBookClick={() => setIsBookingOpen(true)} />
+      <Navbar lang={lang} setLang={setLang} onBookClick={() => navigate({ to: "/team" })} />
 
       {/* Hero Header */}
       <div className="mx-auto w-[92%] max-w-6xl pt-6 pb-12">

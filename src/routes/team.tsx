@@ -42,10 +42,16 @@ function TeamPage() {
     return BARBERS.filter((b) => b.role === roleFilter);
   }, [roleFilter]);
 
+  const scrollToBarbers = () => {
+    const el = document.getElementById("barbers-grid");
+    if (el) el.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <main className="relative min-h-screen overflow-x-hidden bg-[#050505] text-foreground pt-28 pb-20">
       {/* Sticky Navbar */}
-      <Navbar lang={lang} setLang={setLang} onBookClick={() => setIsBookingOpen(true)} />
+      <Navbar lang={lang} setLang={setLang} onBookClick={scrollToBarbers} />
+
 
       {/* Hero Header */}
       <div className="mx-auto w-[92%] max-w-6xl pt-6 pb-12">
@@ -97,7 +103,8 @@ function TeamPage() {
 
       {/* Masters Grid */}
       <div className="mx-auto w-[92%] max-w-6xl pb-24">
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div id="barbers-grid" className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 scroll-mt-32">
+
           {filteredBarbers.map((b, idx) => (
             <motion.div
               key={b.id}

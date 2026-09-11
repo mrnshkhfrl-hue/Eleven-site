@@ -169,6 +169,14 @@ function Index() {
     }
   };
 
+  const scrollToTeam = () => {
+    const el = document.getElementById("team");
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+
   const filteredServices = useMemo(() => {
     if (activeCategory === "all") {
       if (showAllServices) return SERVICES;
@@ -180,7 +188,7 @@ function Index() {
   return (
     <main className="relative overflow-x-hidden bg-[#050505] text-foreground pb-20">
       {/* Shared Navbar */}
-      <Navbar lang={lang} setLang={setLang} onBookClick={() => setIsBookingOpen(true)} />
+      <Navbar lang={lang} setLang={setLang} onBookClick={scrollToTeam} />
 
       {/* ─────────────────────── HERO ─────────────────────── */}
       <section
@@ -237,7 +245,7 @@ function Index() {
             className="mt-10 flex flex-col items-center gap-5 sm:flex-row"
           >
             <button
-              onClick={() => setIsBookingOpen(true)}
+              onClick={scrollToTeam}
               className="group inline-flex items-center gap-3 rounded-full px-8 py-4 text-sm font-semibold tracking-wide transition hover:bg-white/10 glass-strong shadow-[0_0_30px_rgba(255,255,255,0.15)] cursor-pointer"
             >
               {L.heroCta}
@@ -648,7 +656,7 @@ function Index() {
           )}
 
           <button
-            onClick={() => setIsBookingOpen(true)}
+            onClick={scrollToTeam}
             className="group inline-flex items-center gap-3 rounded-full bg-primary px-8 py-3.5 text-xs font-semibold uppercase tracking-wider text-primary-foreground shadow-[0_0_30px_rgba(255,255,255,0.2)] transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
           >
             <span>{L.chooseMaster}</span>
