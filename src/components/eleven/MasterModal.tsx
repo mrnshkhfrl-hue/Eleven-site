@@ -175,7 +175,13 @@ export function MasterModal({ master, isOpen = false, onClose, lang }: Props) {
                     <p className="mb-2 text-[10px] tracking-[0.25em] text-muted-foreground uppercase">
                       {L.portfolio}
                     </p>
-                    <div className="grid grid-cols-3 gap-2">
+                    <div
+                      className={`grid gap-2 ${
+                        master.portfolio.length === 4
+                          ? "grid-cols-2 sm:grid-cols-4"
+                          : "grid-cols-3"
+                      }`}
+                    >
                       {master.portfolio.map((src, i) => (
                         <div
                           key={`${master.id}-${i}`}

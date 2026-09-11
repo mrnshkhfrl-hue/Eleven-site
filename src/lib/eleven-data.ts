@@ -241,11 +241,12 @@ export type Barber = {
 };
 
 const BARBER_PORTFOLIOS: Record<string, string[]> = {
-  // 1. Bobur Vafaev (VIP Founder — beard trim shears, temple clipper fade, straight razor shave)
+  // 1. Bobur Vafaev (VIP Founder — real studio & client portfolio)
   "308631": [
-    "/portfolio/portfolio-01.jpg",
-    "/portfolio/portfolio-02.jpg",
-    "/portfolio/portfolio-03.jpg",
+    "/portfolio/bobur-01.jpg",
+    "/portfolio/bobur-02.jpg",
+    "/portfolio/bobur-03.jpg",
+    "/portfolio/bobur-04.jpg",
   ],
   // 2. Shaxriyor Mansurov (TOP Barber — hairline fade, neck taper, high skin fade)
   "503580": [
