@@ -240,11 +240,81 @@ export type Barber = {
   portfolio: string[];
 };
 
-const WORK = [
-  P("photo-1585747860715-2ba37e788b70"),
-  P("photo-1596728325488-58c87691e9af"),
-  P("photo-1621605815971-fbc98d665033"),
-];
+const BARBER_PORTFOLIOS: Record<string, string[]> = {
+  // 1. Bobur Vafaev (VIP Founder — luxury precision fades & scissor contour)
+  "308631": [
+    P("photo-1503951914875-452162b0f3f1"),
+    P("photo-1599351431202-1e0f0137899a"),
+    P("photo-1622286342621-4bd786c2447c"),
+  ],
+  // 2. Shaxriyor Mansurov (TOP Barber — signature fades & beard sculpting)
+  "503580": [
+    P("photo-1541533848490-bc8115cd6522"),
+    P("photo-1596728325488-58c87691e9af"),
+    P("photo-1559692984-576c4679298e"),
+  ],
+  // 3. Diyor Valiyev (Modern textures & beard architecture)
+  "330264": [
+    P("photo-1585747860715-2ba37e788b70"),
+    P("photo-1621605815971-fbc98d665033"),
+    P("photo-1605497788044-5a32c7078486"),
+  ],
+  // 4. Fayoz Rakhmonov (Skin fades, beard grooming & clean style)
+  "394656": [
+    P("photo-1531427186611-ecfd6d936c79"),
+    P("photo-1472099645785-5658abf4ff4e"),
+    P("photo-1519741497674-611481863552"),
+  ],
+  // 5. Jahongir Azizov (Low fade, clean razor lines & crop)
+  "573821": [
+    P("photo-1480429370139-e0132c086e2a"),
+    P("photo-1508214751196-bcfd4ca60f91"),
+    P("photo-1531384441138-2736e62e0919"),
+  ],
+  // 6. Samir Axmedov (Beard care, hot towel & classic pompadour)
+  "330249": [
+    P("photo-1500648767791-00dcc994a43e"),
+    P("photo-1506794778202-cad84cf45f1d"),
+    P("photo-1492562080023-ab3db95bfbce"),
+  ],
+  // 7. Shax Adilov (Gentle cuts, classic shape & clean lines)
+  "1108981": [
+    P("photo-1517841905240-472988babdf9"),
+    P("photo-1539571696357-5a69c17a67c6"),
+    P("photo-1507003211169-0a1dd7228f2d"),
+  ],
+  // 8. Rajabov Shaxboz (Clean fade, texturing & contour)
+  "shaxboz-rajabov": [
+    P("photo-1517832606299-7ae9b720a186"),
+    P("photo-1534528741775-53994a69daeb"),
+    P("photo-1567894340315-735d7c361db0"),
+  ],
+  // 9. Izzat Zokirov (Sharp crop, classic part & pompadour)
+  "415119": [
+    P("photo-1519085360753-af0119f7cbe7"),
+    P("photo-1522075469751-3a6694fb2f61"),
+    P("photo-1501196354995-cbb51c65aaea"),
+  ],
+  // 10. Munis Burxanov (Toning, camouflage & precision taper)
+  "324800": [
+    P("photo-1521119989659-a83eee488004"),
+    P("photo-1513956589380-bad6acb9b9d4"),
+    P("photo-1512485694743-9c9538b4e6e0"),
+  ],
+  // 11. Sanjar Xuramov (Fast clean haircuts & beard styling)
+  "333234": [
+    P("photo-1496345875659-11f7dd282d1d"),
+    P("photo-1524504388940-b1c1722653e1"),
+    P("photo-1622287162716-f311baa1a2b8"),
+  ],
+  // 12. Parviz Akilov (Modern cut, razor contour & texturing)
+  "parviz-akilov": [
+    P("photo-1528892952291-009c663ce843"),
+    P("photo-1590540179937-484393bfd879"),
+    P("photo-1521498542256-5aeb47ba2b36"),
+  ],
+};
+
 
 export const SONLINE_PLACE_ID = "624881582";
 
@@ -364,7 +434,14 @@ const RAW: Omit<Barber, "portfolio">[] = [
   },
 ];
 
-export const BARBERS: Barber[] = RAW.map((b) => ({ ...b, portfolio: WORK }));
+export const BARBERS: Barber[] = RAW.map((b) => ({
+  ...b,
+  portfolio: BARBER_PORTFOLIOS[b.id] ?? [
+    P("photo-1503951914875-452162b0f3f1"),
+    P("photo-1599351431202-1e0f0137899a"),
+    P("photo-1622286342621-4bd786c2447c"),
+  ],
+}));
 
 export const LOOKBOOK = [
   "/vibe/vibe-1-entrance.jpg",

@@ -68,24 +68,20 @@ export const Route = createFileRoute("/")({
 
 /* ─── Assets ─── */
 const HERO_IMG = "/hero-bg.jpg";
+const HERO_IMG_MOBILE = "/hero-bg-mobile.jpg";
 
-const DIVIDER_IMG =
-  "https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&w=1920&q=80";
+const DIVIDER_IMG = "/vibe/vibe-10-loft-lounge.jpg";
 
-/* ─── Sort services: Стрижка 120k → Стрижка TOP 150k → Стрижка+Борода 200k → rest ─── */
+/* ─── Top 3 services for initial view: Стрижка 120k → Стрижка TOP 150k → Стрижка+Борода 200k ─── */
 const MAIN_ORDER = ["barber-haircut", "top-haircut", "top-haircut-beard"];
 
 function sortedMainServices(services: typeof SERVICES) {
-  const mainServices = services.filter((s) => s.isMain);
-  return mainServices.sort((a, b) => {
-    const aIdx = MAIN_ORDER.indexOf(a.id);
-    const bIdx = MAIN_ORDER.indexOf(b.id);
-    if (aIdx !== -1 && bIdx !== -1) return aIdx - bIdx;
-    if (aIdx !== -1) return -1;
-    if (bIdx !== -1) return 1;
-    return 0;
-  });
+  const top3 = MAIN_ORDER.map((id) => services.find((s) => s.id === id)).filter(
+    (s): s is (typeof SERVICES)[0] => Boolean(s),
+  );
+  return top3.length === 3 ? top3 : services.slice(0, 3);
 }
+
 
 function Index() {
   const [lang, setLang] = useLang();
@@ -192,14 +188,18 @@ function Index() {
         className="relative flex pt-28 pb-16 sm:min-h-screen sm:pt-0 sm:pb-0 items-center justify-center overflow-hidden"
       >
         {/* Background */}
-        <img
-          src={HERO_IMG}
-          alt="Фасад и вход в барбершоп ELEVEN в Самарканде"
-          decoding="async"
-          className="absolute inset-0 size-full scale-110 object-cover blur-[3px] brightness-90"
-        />
+        <picture className="absolute inset-0 size-full pointer-events-none">
+          <source media="(max-width: 640px)" srcSet={HERO_IMG_MOBILE} />
+          <img
+            src={HERO_IMG}
+            alt="Фасад и вход в барбершоп ELEVEN в Самарканде"
+            decoding="async"
+            className="size-full scale-105 object-cover object-[center_35%] sm:object-center blur-[1.5px] sm:blur-[2.5px] brightness-95 sm:brightness-90"
+          />
+        </picture>
         {/* Dark gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/70 to-[#050505]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/65 to-[#050505]" />
+
 
         {/* Content */}
         <div className="relative z-10 flex flex-col items-center text-center px-4">
@@ -414,7 +414,7 @@ function Index() {
       </section>
 
       {/* ─────────────────────── PHOTO DIVIDER (Fullscreen background photo) ─────────────────────── */}
-      <section className="relative h-[70vh] sm:h-[80vh] flex items-center justify-center overflow-hidden">
+      <section className="relative py-20 sm:py-28 min-h-[580px] flex items-center justify-center overflow-hidden">
         <img
           src={DIVIDER_IMG}
           alt="Атмосфера барбершопа ELEVEN"
@@ -422,9 +422,9 @@ function Index() {
           decoding="async"
           className="absolute inset-0 size-full object-cover scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#050505] via-black/60 to-[#050505]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#050505] via-black/80 to-[#050505]" />
 
-        <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-3xl">
+        <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-3xl w-full">
           <motion.h2
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -450,20 +450,21 @@ function Index() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4 w-full"
+            className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4 w-full"
           >
             {[
               { icon: Droplets, t: L.cardCareT, d: L.cardCareD },
               { icon: Coffee, t: L.cardCoffeeT, d: L.cardCoffeeD },
               { icon: Scissors, t: L.cardTeamT, d: L.cardTeamD },
             ].map((c) => (
-              <div key={c.t} className="rounded-2xl p-5 glass text-center">
-                <c.icon className="size-5 mx-auto" />
+              <div key={c.t} className="rounded-2xl p-5 glass border border-white/10 text-center shadow-lg">
+                <c.icon className="size-5 mx-auto text-foreground/90" />
                 <h3 className="mt-3 text-sm font-semibold tracking-wide">{c.t}</h3>
                 <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{c.d}</p>
               </div>
             ))}
           </motion.div>
+
 
           <motion.button
             initial={{ opacity: 0, y: 16 }}
@@ -549,10 +550,10 @@ function Index() {
           })}
         </motion.div>
 
-        {/* Services — horizontal scroll on mobile, grid on desktop */}
+        {/* Services — clean responsive grid showing 3 items clearly on mobile */}
         <div
           ref={servicesCarouselRef}
-          className="flex gap-5 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4 sm:grid sm:grid-cols-2 sm:overflow-visible sm:snap-none sm:pb-0 lg:grid-cols-3"
+          className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 w-full"
         >
           {filteredServices.map((s, i) => {
             const roleBadgeStyle =
@@ -572,8 +573,9 @@ function Index() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.5, delay: i * 0.04 }}
-                className="w-[80vw] shrink-0 snap-center sm:w-auto sm:shrink group flex flex-col justify-between overflow-hidden rounded-[2rem] glass transition-all duration-300 hover:bg-white/[0.08] hover:border-white/20 hover:-translate-y-1"
+                className="w-full group flex flex-col justify-between overflow-hidden rounded-[2rem] glass transition-all duration-300 hover:bg-white/[0.08] hover:border-white/20 hover:-translate-y-1"
               >
+
                 {/* Service photo */}
                 <div
                   onClick={() => {
