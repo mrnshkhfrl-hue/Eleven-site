@@ -118,12 +118,12 @@ export function MasterModal({ master, isOpen = false, onClose, lang }: Props) {
                 /* ─── Specific Master Portfolio / bio view ─── */
                 <div className="space-y-5 pt-1">
                   {/* Master photo */}
-                  <div className="overflow-hidden rounded-[1.5rem] border border-white/10 relative group">
+                  <div className="overflow-hidden rounded-[1.5rem] border border-white/10 relative group max-h-[380px] sm:max-h-[440px] flex items-center justify-center bg-black/40">
                     <img
                       src={master.photo}
                       alt={master.name}
                       decoding="async"
-                      className="aspect-[4/3] w-full object-cover object-top grayscale"
+                      className="aspect-[3/4] size-full object-cover object-center grayscale transition duration-500 hover:grayscale-0"
                     />
                     <div className="absolute top-3 left-3">
                       <span
@@ -136,6 +136,7 @@ export function MasterModal({ master, isOpen = false, onClose, lang }: Props) {
                       </span>
                     </div>
                   </div>
+
 
                   {/* Name & role */}
                   <div className="flex flex-wrap items-center justify-between gap-2">

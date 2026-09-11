@@ -241,80 +241,79 @@ export type Barber = {
 };
 
 const BARBER_PORTFOLIOS: Record<string, string[]> = {
-  // 1. Bobur Vafaev (VIP Founder — luxury precision fades & scissor contour)
+  // 1. Bobur Vafaev (VIP Founder — luxury straight razor shave, hot towel & clipper fade)
   "308631": [
+    P("photo-1605497788044-5a32c7078486"),
     P("photo-1503951914875-452162b0f3f1"),
     P("photo-1599351431202-1e0f0137899a"),
-    P("photo-1622286342621-4bd786c2447c"),
   ],
-  // 2. Shaxriyor Mansurov (TOP Barber — signature fades & beard sculpting)
+  // 2. Shaxriyor Mansurov (TOP Barber — skin fade, shavette razor line & shear work)
   "503580": [
-    P("photo-1541533848490-bc8115cd6522"),
     P("photo-1596728325488-58c87691e9af"),
-    P("photo-1559692984-576c4679298e"),
-  ],
-  // 3. Diyor Valiyev (Modern textures & beard architecture)
-  "330264": [
     P("photo-1585747860715-2ba37e788b70"),
     P("photo-1621605815971-fbc98d665033"),
-    P("photo-1605497788044-5a32c7078486"),
   ],
-  // 4. Fayoz Rakhmonov (Skin fades, beard grooming & clean style)
-  "394656": [
-    P("photo-1531427186611-ecfd6d936c79"),
-    P("photo-1472099645785-5658abf4ff4e"),
-    P("photo-1519741497674-611481863552"),
-  ],
-  // 5. Jahongir Azizov (Low fade, clean razor lines & crop)
-  "573821": [
-    P("photo-1480429370139-e0132c086e2a"),
-    P("photo-1508214751196-bcfd4ca60f91"),
-    P("photo-1531384441138-2736e62e0919"),
-  ],
-  // 6. Samir Axmedov (Beard care, hot towel & classic pompadour)
-  "330249": [
-    P("photo-1500648767791-00dcc994a43e"),
-    P("photo-1506794778202-cad84cf45f1d"),
-    P("photo-1492562080023-ab3db95bfbce"),
-  ],
-  // 7. Shax Adilov (Gentle cuts, classic shape & clean lines)
-  "1108981": [
-    P("photo-1517841905240-472988babdf9"),
-    P("photo-1539571696357-5a69c17a67c6"),
-    P("photo-1507003211169-0a1dd7228f2d"),
-  ],
-  // 8. Rajabov Shaxboz (Clean fade, texturing & contour)
-  "shaxboz-rajabov": [
-    P("photo-1517832606299-7ae9b720a186"),
-    P("photo-1534528741775-53994a69daeb"),
+  // 3. Diyor Valiyev (Barber — shear texturing, clipper fade & styling)
+  "330264": [
     P("photo-1567894340315-735d7c361db0"),
+    P("photo-1593702275687-f8b402bf1fb5"),
+    P("photo-1517832606299-7ae9b720a186"),
   ],
-  // 9. Izzat Zokirov (Sharp crop, classic part & pompadour)
+  // 4. Fayoz Rakhmonov (Barber — classic scissor cut & razor detailing)
+  "394656": [
+    P("photo-1635273051937-a0ddef9573b6"),
+    P("photo-1593702295094-aea22597af65"),
+    P("photo-1647140655214-e4a2d914971f"),
+  ],
+  // 5. Jahongir Azizov (Barber — sharp clipper fade & comb technique)
+  "573821": [
+    P("photo-1635273051839-003bf06a8751"),
+    P("photo-1599011176306-4a96f1516d4d"),
+    P("photo-1657105052497-f996284ffff8"),
+  ],
+  // 6. Samir Axmedov (Barber — razor contour, warm foam & beard care)
+  "330249": [
+    P("photo-1593702288056-7927b442d0fa"),
+    P("photo-1605497787865-e6d4762b386f"),
+    P("photo-1493256338651-d82f7acb2b38"),
+  ],
+  // 7. Shax Adilov (Barber — clean scissor work & hair comb styling)
+  "1108981": [
+    P("photo-1598524374912-6b0b0bab43dd"),
+    P("photo-1599351431408-433ef72fe40b"),
+    P("photo-1648221122323-572c13a31663"),
+  ],
+  // 8. Rajabov Shaxboz (Barber — clipper fade, comb & scissor cut)
+  "shaxboz-rajabov": [
+    P("photo-1672642150228-3fcd5826ec26"),
+    P("photo-1589985494639-69e60c82cab2"),
+    P("photo-1604355240616-5e907f42b431"),
+  ],
+  // 9. Izzat Zokirov (Barber — classic scissor cutting & razor work)
   "415119": [
-    P("photo-1519085360753-af0119f7cbe7"),
-    P("photo-1522075469751-3a6694fb2f61"),
-    P("photo-1501196354995-cbb51c65aaea"),
+    P("photo-1640301133543-41fe25ad6450"),
+    P("photo-1640301133857-c4bc5789c1bb"),
+    P("photo-1520338661084-680395057c93"),
   ],
-  // 10. Munis Burxanov (Toning, camouflage & precision taper)
+  // 10. Munis Burxanov (Barber — beard trim, clippers & styling)
   "324800": [
-    P("photo-1521119989659-a83eee488004"),
-    P("photo-1513956589380-bad6acb9b9d4"),
-    P("photo-1512485694743-9c9538b4e6e0"),
+    P("photo-1582771498000-8ad44e6c84db"),
+    P("photo-1514336937476-a5b961020a5c"),
+    P("photo-1606333259737-6da197890fa2"),
   ],
-  // 11. Sanjar Xuramov (Fast clean haircuts & beard styling)
+  // 11. Sanjar Xuramov (Barber — fast clean cuts, trimmer & styling)
   "333234": [
-    P("photo-1496345875659-11f7dd282d1d"),
-    P("photo-1524504388940-b1c1722653e1"),
-    P("photo-1622287162716-f311baa1a2b8"),
+    P("photo-1585581905588-9e91f63bdd47"),
+    P("photo-1512864084360-7c0c4d0a0845"),
+    P("photo-1599351430140-c70f0250bd70"),
   ],
-  // 12. Parviz Akilov (Modern cut, razor contour & texturing)
+  // 12. Parviz Akilov (Barber — modern cuts, razor detailing & comb)
   "parviz-akilov": [
-    P("photo-1528892952291-009c663ce843"),
-    P("photo-1590540179937-484393bfd879"),
-    P("photo-1521498542256-5aeb47ba2b36"),
+    P("photo-1630435664010-20cbd1d7bb6d"),
+    P("photo-1598524374576-40ba05ac9be5"),
+    P("photo-1527512950678-b88a241e9f4b"),
   ],
 };
-
 
 export const SONLINE_PLACE_ID = "624881582";
 
@@ -328,10 +327,10 @@ const RAW: Omit<Barber, "portfolio">[] = [
     id: "308631",
     name: BOBUR,
     role: "VIP Barber",
-    photo: P("photo-1503443207922-dff7d543fd0e"),
+    photo: "/team/bobur.jpg",
     years: 12,
-    bio: "Основатель ELEVEN. Автор стиля студии, работает только по личной записи.",
-    bioUz: "ELEVEN asoschisi. Studiya uslubi muallifi, faqat shaxsiy yozuv bilan ishlaydi.",
+    bio: "Основатель ELEVEN с 12-летним стажем. Высший уровень мастерства, авторский подход к стилю каждого гостя и безупречное внимание к деталям.",
+    bioUz: "ELEVEN asoschisi, 12 yillik tajribaga ega. Yuqori darajadagi mahorat, har bir mehmon uslubiga mualliflik yondashuvi va mukammal aniqlik.",
   },
   {
     id: "503580",
@@ -339,8 +338,8 @@ const RAW: Omit<Barber, "portfolio">[] = [
     role: "TOP Barber",
     photo: "/team/shaxriyor.jpg",
     years: 9,
-    bio: "Специалист по классике и точным фейдам, работа с густыми волосами.",
-    bioUz: "Klassika va aniq feydlar bo'yicha mutaxassis, qalin sochlar bilan ishlaydi.",
+    bio: "Топ-барбер с 9 годами практики. Виртуозное владение классическими и современными стрижками любой сложности, архитектура бороды и премиальный сервис.",
+    bioUz: "9 yillik amaliyotga ega top-barber. Har qanday murakkablikdagi klassik va zamonaviy soch turmaklarini mohirona bajarish, soqol arxitekturasi va a'lo darajadagi servis.",
   },
   {
     id: "330264",
@@ -348,8 +347,8 @@ const RAW: Omit<Barber, "portfolio">[] = [
     role: "Barber",
     photo: "/team/diyor.jpg",
     years: 5,
-    bio: "Современные текстурные стрижки и архитектура бороды.",
-    bioUz: "Zamonaviy teksturali soch turmaklari va soqol arxitekturasi.",
+    bio: "Мастер с 5-летним опытом в мужском стиле. Аккуратная работа с формой и текстурой, моделирование бороды и внимательное отношение к пожеланиям гостя.",
+    bioUz: "Erkaklar uslubi sohasida 5 yillik tajribaga ega usta. Shakl va tekstura bilan puxta ishlash, soqol modellash va mijoz istaklariga e'tiborli munosabat.",
   },
   {
     id: "394656",
@@ -357,8 +356,8 @@ const RAW: Omit<Barber, "portfolio">[] = [
     role: "Barber",
     photo: "/team/fayoz.jpg",
     years: 13,
-    bio: "Аккуратные мужские стрижки и уверенный стайлинг на каждый день.",
-    bioUz: "Ozoda erkaklar soch turmaklari va har kunlik styling.",
+    bio: "Мастер с 13-летним стажем в барберинге. Колоссальный практический опыт, уверенное владение всеми техниками мужских стрижек и моделирования бороды.",
+    bioUz: "Barbering sohasida 13 yillik tajribaga ega usta. Katta amaliy tajriba, erkaklar soch turmaklari va soqol shakllantirishning barcha texnikalarini mukammal biladi.",
   },
   {
     id: "573821",
@@ -366,8 +365,8 @@ const RAW: Omit<Barber, "portfolio">[] = [
     role: "Barber",
     photo: "/team/jaxongir.jpg",
     years: 8,
-    bio: "Любит короткие формы, скин-фейд и чистые линии.",
-    bioUz: "Qisqa shakllar, skin-feyd va toza chiziqlarni yaxshi ko'radi.",
+    bio: "Квалифицированный барбер с 8-летним стажем. Точность линий, чистые переходы, профессиональный подбор стрижки под форму лица и индивидуальный стиль.",
+    bioUz: "8 yillik tajribaga ega malakali barber. Aniq chiziqlar, toza o'tishlar, yuz tuzilishi va mijoz uslubiga mos soch turmagini professional tanlash.",
   },
   {
     id: "330249",
@@ -375,26 +374,27 @@ const RAW: Omit<Barber, "portfolio">[] = [
     role: "Barber",
     photo: "/team/samir.jpg",
     years: 4,
-    bio: "Работа с бородой, горячее полотенце и уход за кожей лица.",
-    bioUz: "Soqol bilan ishlash, issiq sochiq va yuz terisi parvarishi.",
+    bio: "Талантливый барбер с 4 годами практики. Чистота исполнения, классические и трендовые мужские стрижки, уход за бородой и комфорт в кресле.",
+    bioUz: "4 yillik amaliyotga ega iqtidorli barber. Toza ijro, klassik va zamonaviy erkaklar soch turmaklari, soqol parvarishi va qulay muhit.",
   },
   {
     id: "1108981",
     name: "Shax Adilov",
     role: "Barber",
-    photo: P("photo-1506794778202-cad84cf45f1d"),
+    photo: "/team/shax-adilov.jpg",
     years: 4,
-    bio: "Детские стрижки и спокойная атмосфера в кресле.",
-    bioUz: "Bolalar soch turmaklari va kursida xotirjam muhit.",
+    bio: "Внимательный барбер с 4-летним опытом. Качественное исполнение мужских стрижек, оформление бороды, аккуратность и приятная атмосфера.",
+    bioUz: "4 yillik tajribaga ega e'tiborli usta. Erkaklar soch turmaklarini sifatli bajarish, soqol tartibga solish, ozodalik va yoqimli muhit.",
   },
+
   {
     id: "shaxboz-rajabov",
     name: "Rajabov Shaxboz",
     role: "Barber",
     photo: "/team/shaxboz.jpg",
     years: 7,
-    bio: "Классические и современные стрижки, оформление бороды и индивидуальный стиль.",
-    bioUz: "Klassik va zamonaviy soch turmaklari, soqol parvarishi va individual uslub.",
+    bio: "Опытный барбер со стажем 7 лет. Высокая точность в работе, гармоничные переходы, оформление бороды и персональный подход к каждому клиенту.",
+    bioUz: "7 yillik tajribaga ega tajribali barber. Ishda yuqori aniqlik, uyg'un o'tishlar, soqol dizayni va har bir mijozga individual yondashuv.",
   },
   {
     id: "415119",
@@ -402,8 +402,8 @@ const RAW: Omit<Barber, "portfolio">[] = [
     role: "Barber",
     photo: "/team/izzat.jpg",
     years: 10,
-    bio: "Классические пробор и помпадур, работа с укладкой.",
-    bioUz: "Klassik probor va pompadur, styling bilan ishlaydi.",
+    bio: "Опытный барбер со стажем 10 лет. Безупречная техника работы ножницами и машинкой, идеальные контуры и премиальный мужской уход.",
+    bioUz: "10 yillik tajribaga ega malakali barber. Qaychi va mashinka bilan mukammal ishlash, toza konturlar va yuqori darajadagi erkaklar parvarishi.",
   },
   {
     id: "324800",
@@ -411,8 +411,8 @@ const RAW: Omit<Barber, "portfolio">[] = [
     role: "Barber",
     photo: "/team/munis.jpg",
     years: 8,
-    bio: "Тонирование, камуфляж седины и деликатная коррекция формы.",
-    bioUz: "Toniklash, oq soch kamuflyaji va shaklni nozik to'g'rilash.",
+    bio: "Мастер с 8-летним опытом работы. Профессиональное владение всеми видами мужских стрижек, оформление бороды и премиальные уходовые процедуры.",
+    bioUz: "8 yillik tajribaga ega usta. Erkaklar soch turmaklarining barcha turlarini professional bajarish, soqol parvarishi va yuqori sifatli muolajalar.",
   },
   {
     id: "333234",
@@ -420,8 +420,8 @@ const RAW: Omit<Barber, "portfolio">[] = [
     role: "Barber",
     photo: "/team/sanjar.jpg",
     years: 4,
-    bio: "Быстро и чисто: базовые стрижки для плотного графика.",
-    bioUz: "Tez va toza: zich jadval uchun asosiy soch turmaklari.",
+    bio: "Энергичный мастер с 4-летним стажем. Уверенное владение техниками стрижки и шейвинга, аккуратность, внимание к деталям и свежий взгляд на стиль.",
+    bioUz: "4 yillik tajribaga ega g'ayratli usta. Soch olish va soqol turmaklash texnikalarini ishonchli biladi, aniqlik va har bir detalga e'tibor qaratadi.",
   },
   {
     id: "parviz-akilov",
@@ -429,10 +429,11 @@ const RAW: Omit<Barber, "portfolio">[] = [
     role: "Barber",
     photo: "/team/parviz.jpg",
     years: 7,
-    bio: "Современные мужские стрижки, текстурирование и четкие контуры.",
-    bioUz: "Zamonaviy erkaklar soch turmaklari, teksturalash va toza konturlar.",
+    bio: "Профессиональный барбер с 7-летним стажем. Владеет передовыми техниками стрижек, безупречной геометрией линий и качественным мужским уходом.",
+    bioUz: "7 yillik stajga ega professional barber. Ilg'or soch turmaklash texnikalari, mukammal chiziqlar geometriyasi va sifatli parvarish ustasi.",
   },
 ];
+
 
 export const BARBERS: Barber[] = RAW.map((b) => ({
   ...b,
