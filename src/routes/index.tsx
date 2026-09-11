@@ -67,8 +67,7 @@ export const Route = createFileRoute("/")({
 });
 
 /* ─── Assets ─── */
-const HERO_IMG =
-  "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=1920&q=80";
+const HERO_IMG = "/hero-bg.jpg";
 
 const DIVIDER_IMG =
   "https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&w=1920&q=80";
@@ -195,12 +194,12 @@ function Index() {
         {/* Background */}
         <img
           src={HERO_IMG}
-          alt="Интерьер барбершопа ELEVEN"
+          alt="Фасад и вход в барбершоп ELEVEN в Самарканде"
           decoding="async"
-          className="absolute inset-0 size-full scale-105 object-cover"
+          className="absolute inset-0 size-full scale-110 object-cover blur-[3px] brightness-90"
         />
-        {/* Heavy dark overlay */}
-        <div className="absolute inset-0 bg-black/80" />
+        {/* Dark gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/70 to-[#050505]" />
 
         {/* Content */}
         <div className="relative z-10 flex flex-col items-center text-center px-4">
