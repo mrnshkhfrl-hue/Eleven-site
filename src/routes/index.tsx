@@ -67,8 +67,10 @@ export const Route = createFileRoute("/")({
 });
 
 /* ─── Assets ─── */
-const HERO_IMG = "/hero-bg.jpg";
-const HERO_IMG_MOBILE = "/hero-bg-mobile.jpg";
+const HERO_IMG_WEBP = "/hero-bg.webp";
+const HERO_IMG_JPG = "/hero-bg.jpg";
+const HERO_IMG_MOBILE_WEBP = "/hero-bg-mobile.webp";
+const HERO_IMG_MOBILE_JPG = "/hero-bg-mobile.jpg";
 
 const DIVIDER_IMG = "/vibe/vibe-10-loft-lounge.jpg";
 
@@ -110,19 +112,27 @@ function Index() {
   const checkScrollButtons = useCallback(() => {
     if (!carouselRef.current) return;
     const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current;
-    setCanScrollLeft(scrollLeft > 10);
-    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
+    const nextLeft = scrollLeft > 10;
+    const nextRight = scrollLeft < scrollWidth - clientWidth - 10;
+    setCanScrollLeft((prev) => (prev !== nextLeft ? nextLeft : prev));
+    setCanScrollRight((prev) => (prev !== nextRight ? nextRight : prev));
   }, []);
 
   useEffect(() => {
     const el = carouselRef.current;
     if (!el) return;
+    let rafId: number;
+    const onScroll = () => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(checkScrollButtons);
+    };
     checkScrollButtons();
-    el.addEventListener("scroll", checkScrollButtons, { passive: true });
-    window.addEventListener("resize", checkScrollButtons);
+    el.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
     return () => {
-      el.removeEventListener("scroll", checkScrollButtons);
-      window.removeEventListener("resize", checkScrollButtons);
+      cancelAnimationFrame(rafId);
+      el.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
     };
   }, [checkScrollButtons]);
 
@@ -195,18 +205,21 @@ function Index() {
         id="home"
         className="relative flex pt-28 pb-16 sm:min-h-screen sm:pt-0 sm:pb-0 items-center justify-center overflow-hidden"
       >
-        {/* Background */}
+        {/* Background - Ultra-sharp 4K/2K storefront without artificial blur */}
         <picture className="absolute inset-0 size-full pointer-events-none">
-          <source media="(max-width: 640px)" srcSet={HERO_IMG_MOBILE} />
+          <source media="(max-width: 640px)" type="image/webp" srcSet={HERO_IMG_MOBILE_WEBP} />
+          <source media="(max-width: 640px)" type="image/jpeg" srcSet={HERO_IMG_MOBILE_JPG} />
+          <source type="image/webp" srcSet={HERO_IMG_WEBP} />
           <img
-            src={HERO_IMG}
+            src={HERO_IMG_JPG}
             alt="Фасад и вход в барбершоп ELEVEN в Самарканде"
+            fetchPriority="high"
             decoding="async"
-            className="size-full scale-105 object-cover object-[center_35%] sm:object-center blur-[1.5px] sm:blur-[2.5px] brightness-95 sm:brightness-90"
+            className="size-full object-cover object-[center_35%] sm:object-center brightness-90 contrast-[1.03]"
           />
         </picture>
-        {/* Dark gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/65 to-[#050505]" />
+        {/* Dark gradient overlay for high contrast readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-[#050505]" />
 
 
         {/* Content */}
@@ -215,7 +228,7 @@ function Index() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="mb-6 inline-flex items-center rounded-full px-5 py-2 text-[10px] font-medium tracking-[0.3em] uppercase glass"
+            className="mb-6 inline-flex items-center rounded-full px-5 py-2 text-[10px] font-medium tracking-[0.3em] uppercase bg-white/10 border border-white/20 backdrop-blur-md"
           >
             {L.heroBadge}
           </motion.p>
@@ -224,7 +237,7 @@ function Index() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1 }}
-            className="font-display text-[clamp(4rem,15vw,12rem)] leading-[0.85] tracking-tight"
+            className="font-display text-[clamp(4rem,15vw,12rem)] leading-[0.85] tracking-tight drop-shadow-[0_4px_32px_rgba(0,0,0,0.85)]"
           >
             {L.heroTitle}
           </motion.h1>
@@ -233,7 +246,7 @@ function Index() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="mt-4 text-sm tracking-[0.2em] text-muted-foreground uppercase sm:text-base"
+            className="mt-4 text-sm tracking-[0.2em] text-muted-foreground uppercase sm:text-base drop-shadow-md"
           >
             {L.heroSub}
           </motion.p>
@@ -251,7 +264,7 @@ function Index() {
               {L.heroCta}
               <ArrowRight className="size-4 transition group-hover:translate-x-1" />
             </button>
-            <div className="flex flex-col gap-1 text-xs text-muted-foreground">
+            <div className="flex flex-col gap-1 text-xs text-muted-foreground drop-shadow-sm">
               <span className="inline-flex items-center gap-2">
                 <MapPin className="size-3.5" /> {ADDRESS[lang]}, {ADDRESS_CITY[lang]}
               </span>
@@ -267,7 +280,6 @@ function Index() {
       <section
         id="team"
         className="py-12 sm:py-28 scroll-mt-24"
-        style={{ contentVisibility: "auto", containIntrinsicSize: "auto 500px" }}
       >
         <div className="mx-auto mb-8 flex w-[92%] max-w-6xl flex-wrap items-end justify-between gap-4">
           <motion.div
@@ -349,20 +361,16 @@ function Index() {
             }`}
             style={{ scrollBehavior: isDragging ? "auto" : "smooth" }}
           >
-            {BARBERS.map((b, i) => (
-              <motion.button
+            {BARBERS.map((b) => (
+              <button
                 key={b.id}
                 data-barber-card
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.04 }}
                 onClick={() => {
                   if (!dragStartRef.current.hasMoved) {
                     setMaster(b);
                   }
                 }}
-                className="w-[68vw] shrink-0 snap-center overflow-hidden rounded-[2rem] text-left transition-all duration-300 hover:bg-white/[0.08] hover:border-white/20 hover:-translate-y-1 sm:w-64 glass flex flex-col justify-between"
+                className="w-[68vw] shrink-0 snap-center overflow-hidden rounded-[2rem] text-left transition-all duration-300 hover:bg-white/[0.08] hover:border-white/20 hover:-translate-y-1 sm:w-64 glass flex flex-col justify-between cursor-pointer"
               >
                 <div className="relative aspect-[3/4] w-full overflow-hidden">
                   <img
@@ -401,7 +409,7 @@ function Index() {
                     </span>
                   </div>
                 </div>
-              </motion.button>
+              </button>
             ))}
           </div>
 
@@ -492,7 +500,6 @@ function Index() {
       <section
         id="services"
         className="mx-auto w-[92%] max-w-6xl py-28 scroll-mt-24"
-        style={{ contentVisibility: "auto", containIntrinsicSize: "auto 800px" }}
       >
         <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
           <motion.div
@@ -521,13 +528,7 @@ function Index() {
         </div>
 
         {/* Category Switcher Tabs */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="mb-8 flex flex-wrap items-center gap-2 sm:gap-3"
-        >
+        <div className="mb-8 flex flex-wrap items-center gap-2 sm:gap-3">
           <button
             onClick={() => setActiveCategory("all")}
             className={`rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-wider transition-all duration-300 ${
@@ -556,7 +557,7 @@ function Index() {
               </button>
             );
           })}
-        </motion.div>
+        </div>
 
         {/* Services — clean responsive grid showing 3 items clearly on mobile */}
         <div
@@ -575,15 +576,10 @@ function Index() {
               s.category === "vip" ? "VIP" : s.category === "top" ? "TOP BARBER" : "BARBER";
 
             return (
-              <motion.div
+              <div
                 key={s.id}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 0.5, delay: i * 0.04 }}
                 className="w-full group flex flex-col justify-between overflow-hidden rounded-[2rem] glass transition-all duration-300 hover:bg-white/[0.08] hover:border-white/20 hover:-translate-y-1"
               >
-
                 {/* Service photo */}
                 <div
                   onClick={() => {
@@ -632,7 +628,7 @@ function Index() {
                     </span>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             );
           })}
         </div>
@@ -669,7 +665,6 @@ function Index() {
       <section
         id="lookbook"
         className="mx-auto w-[92%] max-w-6xl pb-28"
-        style={{ contentVisibility: "auto", containIntrinsicSize: "auto 800px" }}
       >
         <motion.div
           initial={{ opacity: 0, y: 24 }}
@@ -695,15 +690,11 @@ function Index() {
           </Link>
         </motion.div>
 
-        {/* Masonry gallery — improved layout */}
+        {/* Masonry gallery — smooth GPU layout */}
         <div className="columns-2 gap-3 sm:gap-4 [column-fill:_balance] lg:columns-3">
           {LOOKBOOK.map((src, i) => (
-            <motion.div
+            <div
               key={src}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.6, delay: i * 0.06 }}
               onClick={() => {
                 setLightboxPhotos(LOOKBOOK);
                 setLightboxIndex(i);
@@ -725,7 +716,7 @@ function Index() {
                   ELEVEN Style #{i + 1}
                 </span>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </section>
@@ -734,7 +725,6 @@ function Index() {
       <section
         id="contacts"
         className="mx-auto w-[92%] max-w-6xl pb-20"
-        style={{ contentVisibility: "auto", containIntrinsicSize: "auto 600px" }}
       >
         <motion.div
           initial={{ opacity: 0, y: 24 }}
@@ -757,13 +747,7 @@ function Index() {
           {/* Info cards */}
           <div className="space-y-4">
             {/* Address */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="rounded-3xl p-6 glass"
-            >
+            <div className="rounded-3xl p-6 glass transition-all duration-300 hover:border-white/20">
               <div className="flex items-center gap-3 mb-3">
                 <div className="grid size-10 place-items-center rounded-2xl bg-white/[0.06]">
                   <MapPin className="size-5 text-foreground/70" />
@@ -775,16 +759,10 @@ function Index() {
               <p className="text-sm font-medium leading-relaxed">
                 {ADDRESS_CITY[lang]}, {ADDRESS[lang]}
               </p>
-            </motion.div>
+            </div>
 
             {/* Hours */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="rounded-3xl p-6 glass"
-            >
+            <div className="rounded-3xl p-6 glass transition-all duration-300 hover:border-white/20">
               <div className="flex items-center gap-3 mb-3">
                 <div className="grid size-10 place-items-center rounded-2xl bg-white/[0.06]">
                   <Clock className="size-5 text-foreground/70" />
@@ -797,16 +775,10 @@ function Index() {
               <p className="mt-1 text-xs text-muted-foreground">
                 {lang === "uz" ? "Har kuni, dam olish kunlarisiz" : "Ежедневно, без выходных"}
               </p>
-            </motion.div>
+            </div>
 
             {/* Phone */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="rounded-3xl p-6 glass"
-            >
+            <div className="rounded-3xl p-6 glass transition-all duration-300 hover:border-white/20">
               <div className="flex items-center gap-3 mb-3">
                 <div className="grid size-10 place-items-center rounded-2xl bg-white/[0.06]">
                   <Phone className="size-5 text-foreground/70" />
@@ -821,16 +793,10 @@ function Index() {
               >
                 {PHONE_NUM}
               </a>
-            </motion.div>
+            </div>
 
             {/* Instagram */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="rounded-3xl p-6 glass"
-            >
+            <div className="rounded-3xl p-6 glass transition-all duration-300 hover:border-white/20">
               <a
                 href={INSTAGRAM}
                 target="_blank"
@@ -842,17 +808,11 @@ function Index() {
                 </span>
                 @eleven_uzb
               </a>
-            </motion.div>
+            </div>
           </div>
 
-          {/* Map — Liquid Glass container */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="relative overflow-hidden rounded-2xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] bg-white/5"
-          >
+          {/* Map — sleek container */}
+          <div className="relative overflow-hidden rounded-2xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] bg-white/5">
             <iframe
               src="https://yandex.uz/map-widget/v1/?from=mapframe&ll=66.923753%2C39.646396&mode=poi&poi%5Bpoint%5D=66.923656%2C39.646335&poi%5Buri%5D=ymapsbm1%3A%2F%2Forg%3Foid%3D242105212925&z=18.82"
               title={L.mapTitle}
@@ -861,7 +821,7 @@ function Index() {
               allowFullScreen
               loading="lazy"
             />
-          </motion.div>
+          </div>
         </div>
       </section>
 

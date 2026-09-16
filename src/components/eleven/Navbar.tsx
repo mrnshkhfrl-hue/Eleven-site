@@ -34,7 +34,7 @@ export function Navbar({ lang, setLang, onBookClick }: Props) {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50">
-      <div className="mx-auto mt-3 flex w-[94%] max-w-5xl items-center justify-between rounded-full px-5 py-3 glass">
+      <div className="mx-auto mt-3 flex w-[94%] max-w-5xl items-center justify-between rounded-full px-5 py-3 glass-nav">
         {/* Logo */}
         <Link
           to="/"
