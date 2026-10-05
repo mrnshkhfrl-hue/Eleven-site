@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import { useState, useMemo } from "react";
 import { Award, Users, ArrowRight, Sparkles } from "lucide-react";
 
@@ -104,56 +104,59 @@ function TeamPage() {
       {/* Masters Grid */}
       <div className="mx-auto w-[92%] max-w-6xl pb-24">
         <div id="barbers-grid" className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 scroll-mt-32">
-
-          {filteredBarbers.map((b, idx) => (
-            <motion.div
-              key={b.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: idx * 0.04 }}
-              onClick={() => setMaster(b)}
-              className="group cursor-pointer overflow-hidden rounded-[2rem] glass transition-all duration-300 hover:bg-white/[0.08] hover:border-white/20 hover:-translate-y-1.5 flex flex-col justify-between"
-            >
-              <div className="relative aspect-[3/4] overflow-hidden">
-                <img
-                  src={b.photo}
-                  alt={b.name}
-                  loading="lazy"
-                  decoding="async"
-                  className="size-full object-cover object-top grayscale transition duration-500 group-hover:scale-105 group-hover:grayscale-0"
-                />
-                <div className="absolute top-3 left-3">
-                  <span
-                    className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[9px] font-semibold uppercase tracking-wider backdrop-blur-md border ${getRoleBadge(
-                      b.role,
-                    )}`}
-                  >
-                    {b.role === "VIP Barber" && <Sparkles className="size-2.5" />}
-                    {b.role}
-                  </span>
-                </div>
-              </div>
-
-              <div className="p-5 space-y-3 flex-grow flex flex-col justify-between">
-                <div>
-                  <h3 className="text-base font-semibold tracking-tight">{b.name}</h3>
-                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
-                    {lang === "uz" ? b.bioUz : b.bio}
-                  </p>
+          <AnimatePresence mode="popLayout">
+            {filteredBarbers.map((b) => (
+              <motion.div
+                key={b.id}
+                layout
+                initial={{ opacity: 0, scale: 0.96 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                onClick={() => setMaster(b)}
+                className="group cursor-pointer overflow-hidden rounded-[2rem] glass transition-all duration-300 hover:bg-white/[0.08] hover:border-white/20 hover:-translate-y-1.5 flex flex-col justify-between"
+              >
+                <div className="relative aspect-[3/4] overflow-hidden bg-black/40">
+                  <img
+                    src={b.photo}
+                    alt={b.name}
+                    loading="lazy"
+                    decoding="async"
+                    className="size-full object-cover object-top grayscale transition duration-500 group-hover:scale-105 group-hover:grayscale-0"
+                  />
+                  <div className="absolute top-3 left-3">
+                    <span
+                      className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[9px] font-semibold uppercase tracking-wider backdrop-blur-md border ${getRoleBadge(
+                        b.role,
+                      )}`}
+                    >
+                      {b.role === "VIP Barber" && <Sparkles className="size-2.5" />}
+                      {b.role}
+                    </span>
+                  </div>
                 </div>
 
-                <div className="pt-3 border-t border-white/5 flex items-center justify-between">
-                  <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
-                    <Award className="size-3.5 text-foreground/70" />
-                    {L.experience}: {b.years} {L.years}
-                  </span>
-                  <span className="text-xs font-semibold uppercase tracking-wider text-foreground group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
-                    {L.book} <ArrowRight className="size-3" />
-                  </span>
+                <div className="p-5 space-y-3 flex-grow flex flex-col justify-between">
+                  <div>
+                    <h3 className="text-base font-semibold tracking-tight">{b.name}</h3>
+                    <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
+                      {lang === "uz" ? b.bioUz : b.bio}
+                    </p>
+                  </div>
+
+                  <div className="pt-3 border-t border-white/5 flex items-center justify-between">
+                    <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <Award className="size-3.5 text-foreground/70" />
+                      {L.experience}: {b.years} {L.years}
+                    </span>
+                    <span className="text-xs font-semibold uppercase tracking-wider text-foreground group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                      {L.book} <ArrowRight className="size-3" />
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </div>
       </div>
 

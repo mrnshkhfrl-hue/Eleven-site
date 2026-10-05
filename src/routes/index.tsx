@@ -72,7 +72,7 @@ const HERO_IMG_JPG = "/hero-bg.jpg";
 const HERO_IMG_MOBILE_WEBP = "/hero-bg-mobile.webp";
 const HERO_IMG_MOBILE_JPG = "/hero-bg-mobile.jpg";
 
-const DIVIDER_IMG = "/vibe/vibe-10-loft-lounge.jpg";
+const DIVIDER_IMG = "/vibe/vibe-atmosphere-divider.jpg";
 
 /* ─── Top 3 services for initial view: Стрижка 120k → Стрижка TOP 150k → Стрижка+Борода 200k ─── */
 const MAIN_ORDER = ["barber-haircut", "top-haircut", "top-haircut-beard"];
