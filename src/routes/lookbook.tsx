@@ -30,7 +30,7 @@ export const Route = createFileRoute("/lookbook")({
   }),
 });
 
-export function LookbookPage() {
+function LookbookPage() {
   const navigate = useNavigate();
   const [lang, setLang] = useLang();
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
@@ -69,7 +69,7 @@ export function LookbookPage() {
         <div className="columns-2 gap-4 [column-fill:_balance] sm:columns-2 lg:columns-3">
           {LOOKBOOK.map((src, i) => (
             <motion.div
-              key={src}
+              key={`${src}-${i}`}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: i * 0.05 }}

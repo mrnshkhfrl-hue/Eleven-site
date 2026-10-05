@@ -212,8 +212,8 @@ function ServicesPage() {
             </h2>
             <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
               {lang === "uz"
-                ? "10 nafar malakali ustalarimizdan birini tanlang yoki asoschimiz Bobur Vafaev huzurida VIP qabulga yoziling."
-                : "Запишитесь к любому из наших 10 мастеров или выберите VIP-обслуживание у основателя Бобура Вафаева."}
+                ? "12 nafar malakali ustalarimizdan birini tanlang yoki asoschimiz Bobur Vafaev huzurida VIP qabulga yoziling."
+                : "Запишитесь к любому из наших 12 мастеров или выберите VIP-обслуживание у основателя Бобура Вафаева."}
             </p>
             <div className="pt-4 flex flex-wrap justify-center gap-4">
               <Link

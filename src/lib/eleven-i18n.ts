@@ -59,7 +59,7 @@ const dict = {
 
     /* team */
     teamTitle: "Команда",
-    teamSubtitle: "10 профессионалов своего дела — от барберов до основателя",
+    teamSubtitle: "12 профессионалов своего дела — от барберов до основателя",
     teamHint: "Листайте стрелками или свайпайте для выбора мастера",
     experience: "Опыт",
     years: "лет",
@@ -137,7 +137,7 @@ const dict = {
 
     /* team */
     teamTitle: "Jamoa",
-    teamSubtitle: "O'z ishining 10 nafar ustasi — barberlardan asoschigacha",
+    teamSubtitle: "O'z ishining 12 nafar ustasi — barberlardan asoschigacha",
     teamHint: "Ustalarni ko'rish uchun strelkalarni bosing yoki suring",
     experience: "Tajriba",
     years: "yil",

@@ -370,16 +370,16 @@ function Index() {
                     setMaster(b);
                   }
                 }}
-                className="w-[68vw] shrink-0 snap-center overflow-hidden rounded-[2rem] text-left transition-all duration-300 hover:bg-white/[0.08] hover:border-white/20 hover:-translate-y-1 sm:w-64 glass flex flex-col justify-between cursor-pointer"
+                className="group w-[68vw] shrink-0 snap-center overflow-hidden rounded-[2rem] text-left transition-all duration-300 hover:bg-white/[0.08] hover:border-white/20 hover:-translate-y-1 sm:w-64 glass flex flex-col justify-between cursor-pointer"
               >
-                <div className="relative aspect-[3/4] w-full overflow-hidden">
+                <div className="relative aspect-[3/4] w-full overflow-hidden bg-black/40">
                   <img
                     src={b.photo}
                     alt={b.name}
                     loading="lazy"
                     decoding="async"
                     draggable={false}
-                    className="size-full object-cover object-top grayscale transition duration-500 hover:grayscale-0 pointer-events-none"
+                    className="size-full object-cover object-top grayscale transition duration-500 group-hover:grayscale-0 group-hover:scale-105 pointer-events-none"
                   />
                   <div className="absolute top-3 left-3">
                     <span
@@ -694,7 +694,7 @@ function Index() {
         <div className="columns-2 gap-3 sm:gap-4 [column-fill:_balance] lg:columns-3">
           {LOOKBOOK.map((src, i) => (
             <div
-              key={src}
+              key={`${src}-${i}`}
               onClick={() => {
                 setLightboxPhotos(LOOKBOOK);
                 setLightboxIndex(i);
